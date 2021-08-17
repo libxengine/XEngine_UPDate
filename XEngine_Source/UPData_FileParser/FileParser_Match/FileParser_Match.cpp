@@ -180,9 +180,7 @@ BOOL CFileParser_Match::FileParser_Match_Start(LPCTSTR lpszFileName, LPCTSTR lps
         FileParser_dwErrorCode = ERROR_XENGINE_UPDATA_FILEPARSER_MATCH_START_NONEWVER;
         return FALSE;
     }
-    CBaseLib_OperatorMemory<FILEPARSER_VERSIONINFO> m_MemoryVersion;
-    m_MemoryVersion.BaseLib_OperatorMemory_Malloc(pppSt_ListUPDataVer, stl_ListUPDataVer.size(), sizeof(FILEPARSER_VERSIONINFO));
-
+    BaseLib_OperatorMemory_Malloc((XPPPMEM)pppSt_ListUPDataVer, stl_ListUPDataVer.size(), sizeof(FILEPARSER_VERSIONINFO));
     list<FILEPARSER_VERSIONINFO>::const_iterator stl_ListIterator = stl_ListUPDataVer.begin();
     for (int i = 0; stl_ListIterator != stl_ListUPDataVer.end(); stl_ListIterator++, i++)
     {

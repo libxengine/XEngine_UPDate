@@ -11,34 +11,21 @@
 // 添加要在此处预编译的标头
 #include "framework.h"
 #include <tchar.h>
-#include <WinSock2.h>
-#include <json/json.h>
-#else
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#ifdef _CENTOS
-#include <json/json.h>
-#else
-#include <jsoncpp/json/json.h>
-#endif
 #endif
 #endif //PCH_H
-#include <list>
-using namespace std;
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Define.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Error.h>
-#include <XEngine_Include/XEngine_NetHelp/APIHelp_Define.h>
-#include <XEngine_Include/XEngine_NetHelp/APIHelp_Error.h>
-#include "FileParser_Define.h"
-#include "FileParser_Error.h"
+#include "Config_Define.h"
+#include "Config_Error.h"
 /********************************************************************
-//    Created:     2021/04/08  13:25:22
-//    File Name:   H:\XEngine\XEngine_SourceCode\XEngine_UPData\UPData_FileParser\pch.h
-//    File Path:   H:\XEngine\XEngine_SourceCode\XEngine_UPData\UPData_FileParser
+//    Created:     2021/08/17  14:48:42
+//    File Name:   D:\XEngine_UPDate\XEngine_Source\UPData_Configure\pch.h
+//    File Path:   D:\XEngine_UPDate\XEngine_Source\UPData_Configure
 //    File Base:   pch
 //    File Ext:    h
 //    Project:     XEngine(网络通信引擎)
@@ -46,22 +33,9 @@ using namespace std;
 //    Purpose:     公用头文件
 //    History:
 *********************************************************************/
-extern BOOL FileParser_IsErrorOccur;
-extern DWORD FileParser_dwErrorCode;
+extern BOOL Config_IsErrorOccur;
+extern DWORD Config_dwErrorCode;
 
 #ifdef _WINDOWS
-#ifdef _DEBUG
-#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x86/XEngine_NetHelp/NetHelp_APIHelp.lib")
-#else
-#ifdef _WIN64
-#pragma comment(lib,"x64/XEngine_NetHelp/XEngine_BaseLib.lib")
-#pragma comment(lib,"x64/XEngine_NetHelp/NetHelp_APIHelp.lib")
-#else
-#pragma comment(lib,"x86/XEngine_NetHelp/XEngine_BaseLib.lib")
-#pragma comment(lib,"x86/XEngine_NetHelp/NetHelp_APIHelp.lib")
-#endif // _WIN64
-#endif
-#else
-
+#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib")
 #endif

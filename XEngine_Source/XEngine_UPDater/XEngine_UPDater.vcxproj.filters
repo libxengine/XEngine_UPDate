@@ -18,5 +18,22 @@
     <ClCompile Include="XEngine_UPDater.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="UPDater_Config.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UPDater_Net.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="UPDater_Config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UPDater_Hdr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UPDater_Net.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

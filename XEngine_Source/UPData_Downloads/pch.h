@@ -24,12 +24,12 @@
 #include <thread>
 #include <unordered_map>
 using namespace std;
-#include "../../XEngine_CommHdr.h"
-#include "../../XEngine_Types.h"
-#include "../../XEngine_Lib/XEngine_BaseLib/BaseLib_Define.h"
-#include "../../XEngine_Lib/XEngine_BaseLib/BaseLib_Error.h"
-#include "../../XEngine_DownLoad/XEngine_DownLoad/DownLoad_Define.h"
-#include "../../XEngine_DownLoad/XEngine_DownLoad/DownLoad_Error.h"
+#include <XEngine_Include/XEngine_CommHdr.h>
+#include <XEngine_Include/XEngine_Types.h>
+#include <XEngine_Include/XEngine_BaseLib/BaseLib_Define.h>
+#include <XEngine_Include/XEngine_BaseLib/BaseLib_Error.h>
+#include <XEngine_Include/XEngine_DownLoad/DownLoad_Define.h>
+#include <XEngine_Include/XEngine_DownLoad/DownLoad_Error.h>
 #include "../UPData_FileParser/FileParser_Define.h"
 #include "../UPData_FileParser/FileParser_Error.h"
 #include "UPDataDl_Define.h"
@@ -51,18 +51,18 @@ extern DWORD UPData_dwErrorCode;
 
 #ifdef _WINDOWS
 #ifdef _DEBUG
-#pragma comment(lib,"../../Debug/XEngine_BaseLib.lib")
-#pragma comment(lib,"../../Debug/XEngine_DownLoad.lib")
-#pragma comment(lib,"../../Debug/UPData_FileParser.lib")
+#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
+#pragma comment(lib,"x86/XEngine_DownLoad/XEngine_DownLoad.lib")
+#pragma comment(lib,"../Debug/UPData_FileParser.lib")
 #else
 #ifdef _WIN64
-#pragma comment(lib,"../../x64/Release/XEngine_BaseLib.lib")
-#pragma comment(lib,"../../x64/Release/XEngine_DownLoad.lib")
-#pragma comment(lib,"../../x64/Release/UPData_FileParser.lib")
+#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
+#pragma comment(lib,"x64/XEngine_DownLoad/XEngine_DownLoad.lib")
+#pragma comment(lib,"../x64/Release/UPData_FileParser.lib")
 #else
-#pragma comment(lib,"../../Release/XEngine_BaseLib.lib")
-#pragma comment(lib,"../../Release/XEngine_DownLoad.lib")
-#pragma comment(lib,"../../Release/UPData_FileParser.lib")
+#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
+#pragma comment(lib,"x86/XEngine_DownLoad/XEngine_DownLoad.lib")
+#pragma comment(lib,"../Release/UPData_FileParser.lib")
 #endif // _WIN64
 #endif
 #else

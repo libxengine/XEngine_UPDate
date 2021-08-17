@@ -28,13 +28,13 @@
 #endif //PCH_H
 #include <list>
 using namespace std;
-#include "../../XEngine_CommHdr.h"
-#include "../../XEngine_Types.h"
-#include "../../XEngine_Lib/XEngine_BaseLib/BaseLib_Define.h"
-#include "../../XEngine_Lib/XEngine_BaseLib/BaseLib_Error.h"
-#include "../../XEngine_SystemSdk/XEngine_ProcSdk/ProcFile_Define.h"
-#include "../../XEngine_SystemSdk/XEngine_SystemApi/SystemApi_Define.h"
-#include "../../XEngine_SystemSdk/XEngine_SystemApi/SystemApi_Error.h"
+#include <XEngine_Include/XEngine_CommHdr.h>
+#include <XEngine_Include/XEngine_Types.h>
+#include <XEngine_Include/XEngine_BaseLib/BaseLib_Define.h>
+#include <XEngine_Include/XEngine_BaseLib/BaseLib_Error.h>
+#include <XEngine_Include/XEngine_SystemSdk/ProcFile_Define.h>
+#include <XEngine_Include/XEngine_SystemSdk/SystemApi_Define.h>
+#include <XEngine_Include/XEngine_SystemSdk/SystemApi_Error.h>
 #include "../UPData_FileParser/FileParser_Define.h"
 #include "../UPData_FileParser/FileParser_Error.h"
 #include "HelpModule_Define.h"
@@ -55,21 +55,20 @@ extern DWORD HelpModule_dwErrorCode;
 
 #ifdef _WINDOWS
 #ifdef _DEBUG
-#pragma comment(lib,"../../Debug/UPData_FileParser.lib")
-#pragma comment(lib,"../../Debug/XEngine_SystemApi.lib")
-#pragma comment(lib,"../../Debug/XEngine_BaseLib.lib")
+#pragma comment(lib,"../Debug/UPData_FileParser.lib")
+#pragma comment(lib,"x86/XEngine_SystemSdk/XEngine_SystemApi.lib")
+#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #else
 #ifdef _WIN64
-#pragma comment(lib,"../../x64/Release/UPData_FileParser.lib")
-#pragma comment(lib,"../../x64/Release/XEngine_SystemApi.lib")
-#pragma comment(lib,"../../x64/Release/XEngine_BaseLib.lib")
+#pragma comment(lib,"../x64/Release/UPData_FileParser.lib")
+#pragma comment(lib,"x64/XEngine_SystemSdk/XEngine_SystemApi.lib")
+#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
 #else
-#pragma comment(lib,"../../Release/UPData_FileParser.lib")
-#pragma comment(lib,"../../Release/XEngine_SystemApi.lib")
-#pragma comment(lib,"../../Release/XEngine_BaseLib.lib")
+#pragma comment(lib,"../Release/UPData_FileParser.lib")
+#pragma comment(lib,"x86/XEngine_SystemSdk/XEngine_SystemApi.lib")
+#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #endif // _WIN64
 #endif
-#pragma comment(lib,"lib_json.lib")
 #else
 
 #endif

@@ -2,15 +2,18 @@
 
 BOOL bIsRun = FALSE;
 XLOG xhLog = NULL;
-UPDATERSERVICE_CONFIG st_ServiceConfig;
+XENGINE_SERVERCONFIG st_ServiceConfig;
 
 void Signale_Handler(int sig)
 {
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("服务器退出"));
-	bIsRun = FALSE;
+	if (bIsRun)
+	{
+		bIsRun = FALSE;
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("服务器退出"));
 
-	UPData_DlParser_Close();
-	HelpComponents_XLog_Destroy(xhLog);
+		UPData_DlParser_Close();
+		HelpComponents_XLog_Destroy(xhLog);
+	}
 #ifdef _WINDOWS
 	WSACleanup();
 #endif
@@ -20,15 +23,13 @@ void Signale_Handler(int sig)
 int main(int argc, char** argv)
 {
 	bIsRun = TRUE;
-	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
-
-	bIsRun = TRUE;
 	int nDesLen = 1024000;
 	int nUPLen = 1024000;
 	int nListCount = 0;
 
 	TCHAR* ptszUPDesp = NULL;
 	TCHAR* ptszJsonMsg = NULL;
+	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 	FILEPARSER_VERSIONINFO** ppSt_ListVer;
 
 	ptszUPDesp = new TCHAR[nDesLen];
@@ -42,27 +43,29 @@ int main(int argc, char** argv)
 	memset(ptszUPDesp, '\0', nDesLen);
 	memset(ptszJsonMsg, '\0', nUPLen);
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
-	memset(&st_ServiceConfig, '\0', sizeof(UPDATERSERVICE_CONFIG));
-
-	st_XLogConfig.XLog_MaxBackupFile = 10;
-	st_XLogConfig.XLog_MaxSize = 102400;
+	memset(&st_ServiceConfig, '\0', sizeof(XENGINE_SERVERCONFIG));
 
 #ifdef _WINDOWS
 	WSADATA st_WSAData;
 	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
 #endif
-	if (!UPDater_Parament(argc, argv, &st_ServiceConfig))
+
+	if (!UPDater_Parament(argc, argv))
 	{
 		printf("参数解析失败,无法继续\n");
 		return FALSE;
 	}
-	xhLog = HelpComponents_XLog_Init(HELPCOMPONENTS_XLOG_OUTTYPE_STD, &st_XLogConfig);
+	st_XLogConfig.XLog_MaxBackupFile = st_ServiceConfig.st_XLog.nMaxCount;
+	st_XLogConfig.XLog_MaxSize = st_ServiceConfig.st_XLog.nMaxSize;
+	_tcscpy(st_XLogConfig.tszFileName, st_ServiceConfig.st_XLog.tszLogFile);
+
+	xhLog = HelpComponents_XLog_Init(HELPCOMPONENTS_XLOG_OUTTYPE_FILE | HELPCOMPONENTS_XLOG_OUTTYPE_STD, &st_XLogConfig);
 	if (NULL == xhLog)
 	{
 		printf("初始化日志服务失败,无法继续!\n");
 		goto NETSERVICE_APPEXIT;
 	}
-	HelpComponents_XLog_SetLogPriority(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO);
+	HelpComponents_XLog_SetLogPriority(xhLog, st_ServiceConfig.st_XLog.nLogLeave);
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，初始化日志系统成功"));
 
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，初始化配置成功,配置URL:%s,配置本地列表:%s,下载路径:%s,文件下载选项:%d"), st_ServiceConfig.tszUPUrl, st_ServiceConfig.tszLocalList, st_ServiceConfig.tszDownPath, st_ServiceConfig.bIsDown);

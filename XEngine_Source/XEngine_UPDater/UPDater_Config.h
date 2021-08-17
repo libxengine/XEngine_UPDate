@@ -1,4 +1,4 @@
 #pragma once
 
-BOOL UPDater_Parament(int argc,char **argv, UPDATERSERVICE_CONFIG *pSt_StartlParam);
+BOOL UPDater_Parament(int argc,char **argv);
 void UPDater_ParamentHelp();
