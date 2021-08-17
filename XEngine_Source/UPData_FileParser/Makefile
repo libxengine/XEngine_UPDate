@@ -3,10 +3,10 @@ RELEASE = 0
 UNICODE = 0
 INCLUDE = -I ./
 FILECENTOS = /etc/redhat-release
-LOADBIN = -L ../../XEngine_Lib/XEngine_BaseLib -L ../../XEngine_NetHelp/NetHelp_APIHelp
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_NetHelp
 LIB = -lXEngine_BaseLib -lNetHelp_APIHelp -ljsoncpp
 LIBEX = -static-libgcc -lrt -ldl 
-LOADSO = -Wl,-rpath=../XEngine_BaseLib:../XEngine_NetHelp,--disable-new-dtags
+LOADSO = -Wl,-rpath=
 LIBINCLUDE = FileParser_Match.o FileParser_ReadVersion.o pch.o
 
 ifeq ($(RELEASE),1)

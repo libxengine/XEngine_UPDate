@@ -2,11 +2,11 @@ CC = g++ -Wall -std=c++17 -fPIC
 RELEASE = 0
 UNICODE = 0
 INCLUDE = -I ./
-LOADBIN = 
-LIB = -ljsoncpp
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib 
+LIB = -lXEngine_BaseLib 
 LIBEX = -static-libgcc -lrt -ldl -lpthread
 LOADSO = -Wl,-rpath=
-LIBINCLUDE = Config_Json.o pch.o
+LIBINCLUDE = Config_ini.o pch.o
 
 ifeq ($(RELEASE),1)
 FLAGS = -c -O2 
@@ -24,18 +24,18 @@ endif
 
 
 all:$(LIBINCLUDE)
-	$(CC) $(DEBUG) $(LIBINCLUDE) -o libMQCore_ConfigModule.so -shared -fPIC $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
+	$(CC) $(DEBUG) $(LIBINCLUDE) -o libUPData_Configure.so -shared -fPIC $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
 
-Config_Json.o:./Config_Json/Config_Json.cpp             
-	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./Config_Json/Config_Json.cpp 
+Config_ini.o:./Config_ini/Config_ini.cpp             
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./Config_ini/Config_ini.cpp 
 						              
 pch.o:./pch.cpp                 		       	    
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./pch.cpp
 
 
 InstallAll:InstallSo 
-InstallSo:./libMQCore_ConfigModule.so
-	cp ./libMQCore_ConfigModule.so ../../XEngine_Release/libMQCore_ConfigModule.so
+InstallSo:./libUPData_Configure.so
+	cp ./libUPData_Configure.so ../../XEngine_Release/libUPData_Configure.so
 
 
 CleanAll:CleanObj CleanMk

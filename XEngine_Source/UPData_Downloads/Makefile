@@ -3,10 +3,10 @@ RELEASE = 0
 UNICODE = 0
 INCLUDE = -I ./
 FILECENTOS = /etc/redhat-release
-LOADBIN = -L ../../XEngine_Lib/XEngine_BaseLib -L ../../XEngine_DownLoad/XEngine_DownLoad -L ../UPData_FileParser
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_DownLoad -L ../UPData_FileParser
 LIB = -lXEngine_BaseLib -lXEngine_Download -lUPData_FileParser
 LIBEX = -static-libgcc -lrt -ldl -lpthread
-LOADSO = -Wl,-rpath=./:../NetEngine_BaseLib,--disable-new-dtags
+LOADSO = -Wl,-rpath=./,--disable-new-dtags
 LIBINCLUDE = UPData_DlParser.o pch.o
 
 ifeq ($(RELEASE),1)

@@ -2,11 +2,11 @@ CC = g++ -std=c++17 -Wall
 RELEASE = 0
 UNICODE = 0  
 FILECENTOS = /etc/redhat-release
-LOADBIN = -L ../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_BaseLib -L ../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_HelpComponents -L ../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_UPData
-LIB = -lXEngine_BaseLib -lHelpComponents_XLog -lUPData_FileParser -lUPData_Downloads -lUPData_HelpModule
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_HelpComponents -L ../UPData_Downloads -L ../UPData_FileParser -L ../UPData_HelpModule -L ../UPData_Configure
+LIB = -lXEngine_BaseLib -lHelpComponents_XLog -lUPData_FileParser -lUPData_Downloads -lUPData_HelpModule -lUPData_Configure
 LIBEX = -static-libgcc -ldl -lrt -lpthread
-LOADSO = -Wl,-rpath=../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_BaseLib:../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_SystemSdk:../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_DownLoad:../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_NetHelp:../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_HelpComponents:../../../XEngine/XEngine_Release/XEngine_Linux/Ubuntu/XEngine_UPData,--disable-new-dtags
-LIBINCLUDE = UPDater_Net.o UPDater_Config.o UPDater_APPTest.o
+LOADSO = -Wl,-rpath=./,--disable-new-dtags
+LIBINCLUDE = UPDater_Net.o UPDater_Config.o XEngine_UPDater.o
 
 ifeq ($(RELEASE),1)
 FLAGS = -c -O2 
@@ -35,8 +35,8 @@ UPDater_Net.o:./UPDater_Net.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) ./UPDater_Net.cpp
 UPDater_Config.o:./UPDater_Config.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) ./UPDater_Config.cpp
-UPDater_APPTest.o:./UPDater_APPTest.cpp             
-	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) ./UPDater_APPTest.cpp   
+XEngine_UPDater.o:./XEngine_UPDater.cpp             
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) ./XEngine_UPDater.cpp   
 
 
 CleanAll:CleanObj CleanMk
