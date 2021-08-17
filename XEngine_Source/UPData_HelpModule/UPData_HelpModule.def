@@ -1,0 +1,7 @@
+LIBRARY
+
+EXPORTS 
+	UPHelpModule_GetLastError
+
+	HelpModule_Api_Install
+	HelpModule_Api_BuildVer

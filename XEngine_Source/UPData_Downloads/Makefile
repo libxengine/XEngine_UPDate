@@ -1,0 +1,52 @@
+CC = g++ -Wall -std=c++17 -fPIC
+RELEASE = 0
+UNICODE = 0
+INCLUDE = -I ./
+FILECENTOS = /etc/redhat-release
+LOADBIN = -L ../../XEngine_Lib/XEngine_BaseLib -L ../../XEngine_DownLoad/XEngine_DownLoad -L ../UPData_FileParser
+LIB = -lXEngine_BaseLib -lXEngine_Download -lUPData_FileParser
+LIBEX = -static-libgcc -lrt -ldl -lpthread
+LOADSO = -Wl,-rpath=./:../NetEngine_BaseLib,--disable-new-dtags
+LIBINCLUDE = UPData_DlParser.o pch.o
+
+ifeq ($(RELEASE),1)
+FLAGS = -c -O2
+DEBUG =
+else
+FLAGS = -c -lc_p
+DEBUG = -g -pg
+endif
+
+ifeq ($(UNICODE),1)
+UNICODE = -D _UNICODE
+else
+UNICODE =
+endif
+
+all:$(LIBINCLUDE)
+	$(CC) $(DEBUG) $(LIBINCLUDE) -o libUPData_Downloads.so -shared -fPIC $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
+
+
+UPData_DlParser.o:./UPData_DlParser/UPData_DlParser.cpp
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./UPData_DlParser/UPData_DlParser.cpp
+pch.o:pch.cpp
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) pch.cpp
+
+
+InstallAll:InstallSo InstallHeader
+InstallSo:./libUPData_Downloads.so
+ifeq ($(FILECENTOS), $(wildcard $(FILECENTOS)))
+	cp ./libUPData_Downloads.so ../../../XEngine_Release/XEngine_Linux/Centos/XEngine_UPData/libUPData_Downloads.so
+else
+	cp ./libUPData_Downloads.so ../../../XEngine_Release/XEngine_Linux/Ubuntu/XEngine_UPData/libUPData_Downloads.so
+endif
+InstallHeader:./UPDataDl_Define.h ./UPDataDl_Error.h
+	cp ./UPDataDl_Define.h ../../../XEngine_Release/XEngine_Include/XEngine_UPData/UPDataDl_Define.h
+	cp ./UPDataDl_Error.h ../../../XEngine_Release/XEngine_Include/XEngine_UPData/UPDataDl_Error.h
+
+
+CleanAll:CleanObj CleanMk
+CleanObj:
+	rm *.o                                            
+CleanMk:
+	rm *.so

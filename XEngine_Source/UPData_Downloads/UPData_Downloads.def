@@ -1,0 +1,8 @@
+LIBRARY
+
+EXPORTS
+	UPDataDown_GetLastError
+
+	UPData_DlParser_Init
+	UPData_DlParser_CBQuery
+	UPData_DlParser_Close
