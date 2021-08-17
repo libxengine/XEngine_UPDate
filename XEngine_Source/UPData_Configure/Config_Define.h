@@ -18,9 +18,14 @@ typedef struct tag_XEngine_ServerConfig
 	TCHAR tszUPUrl[MAX_PATH];
 	TCHAR tszLocalList[MAX_PATH];
 	TCHAR tszDownPath[MAX_PATH];
-	TCHAR tszMakePath[MAX_PATH];
 	BOOL bIsMake;
 	BOOL bIsDown;
+	struct  
+	{
+		TCHAR tszMakePath[MAX_PATH];
+		TCHAR tszUPFile[MAX_PATH];
+		TCHAR tszUPUrl[MAX_PATH];
+	}st_Maker;
     struct
     {
 		TCHAR tszLogFile[MAX_PATH];

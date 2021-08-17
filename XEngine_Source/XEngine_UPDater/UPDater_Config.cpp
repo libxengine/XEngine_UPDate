@@ -28,8 +28,9 @@ BOOL UPDater_Parament(int argc, char **argv)
 		}
 		else if (0 == _tcscmp("-m", argv[i]))
 		{
-			memset(st_ServiceConfig.tszMakePath, '\0', sizeof(st_ServiceConfig.tszMakePath));
-			_tcscpy_s(st_ServiceConfig.tszMakePath, MAX_PATH, argv[i + 1]);
+			st_ServiceConfig.bIsMake = TRUE;
+			memset(st_ServiceConfig.st_Maker.tszMakePath, '\0', sizeof(st_ServiceConfig.st_Maker.tszMakePath));
+			_tcscpy_s(st_ServiceConfig.st_Maker.tszMakePath, MAX_PATH, argv[i + 1]);
 		}
 		else if (0 == _tcscmp("-l", argv[i]))
 		{

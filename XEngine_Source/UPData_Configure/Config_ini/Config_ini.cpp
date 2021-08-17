@@ -38,6 +38,9 @@ BOOL CConfig_Ini::Config_Ini_File(LPCTSTR lpszConfigFile, XENGINE_SERVERCONFIG* 
 	GetPrivateProfileString(_T("ServiceConfig"), _T("tszLocalList"), NULL, pSt_FileConfig->tszLocalList, MAX_PATH, lpszConfigFile);
 	GetPrivateProfileString(_T("ServiceConfig"), _T("tszDownPath"), NULL, pSt_FileConfig->tszDownPath, MAX_PATH, lpszConfigFile);
 
+	GetPrivateProfileString(_T("ServiceMake"), _T("tszUPFile"), NULL, pSt_FileConfig->st_Maker.tszUPFile, MAX_PATH, lpszConfigFile);
+	GetPrivateProfileString(_T("ServiceMake"), _T("tszUPUrl"), NULL, pSt_FileConfig->st_Maker.tszUPUrl, MAX_PATH, lpszConfigFile);
+
 	pSt_FileConfig->st_XLog.nLogLeave = GetPrivateProfileInt(_T("ServiceXLog"), _T("nLogLeave"), 0, lpszConfigFile);
 	pSt_FileConfig->st_XLog.nMaxCount = GetPrivateProfileInt(_T("ServiceXLog"), _T("nMaxCount"), 0, lpszConfigFile);
 	pSt_FileConfig->st_XLog.nMaxSize = GetPrivateProfileInt(_T("ServiceXLog"), _T("nMaxSize"), 0, lpszConfigFile);

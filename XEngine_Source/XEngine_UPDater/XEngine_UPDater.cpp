@@ -9,10 +9,11 @@ void Signale_Handler(int sig)
 	if (bIsRun)
 	{
 		bIsRun = FALSE;
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("服务器退出"));
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("按任意键,服务器退出"));
 
 		UPData_DlParser_Close();
 		HelpComponents_XLog_Destroy(xhLog);
+		getchar();
 	}
 #ifdef _WINDOWS
 	WSACleanup();
@@ -32,8 +33,8 @@ int main(int argc, char** argv)
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 	FILEPARSER_VERSIONINFO** ppSt_ListVer;
 
-	ptszUPDesp = new TCHAR[nDesLen];
-	ptszJsonMsg = new TCHAR[nUPLen];
+	ptszUPDesp = (TCHAR*)malloc(nDesLen);
+	ptszJsonMsg = (TCHAR*)malloc(nUPLen);
 
 	if ((NULL == ptszUPDesp) || (NULL == ptszJsonMsg))
 	{
@@ -75,10 +76,8 @@ int main(int argc, char** argv)
 
 	if (st_ServiceConfig.bIsMake)
 	{
-		LPCSTR lpszUrl = _T("http://www.xyry.org/UPLoad/XEngine_Release/");
-
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("开始构建版本列表"));
-		if (!HelpModule_Api_BuildVer(st_ServiceConfig.tszMakePath, st_ServiceConfig.tszLocalList, 0, TRUE, "XEngine_Release.txt", lpszUrl))
+		if (!HelpModule_Api_BuildVer(st_ServiceConfig.st_Maker.tszMakePath, st_ServiceConfig.tszLocalList, 0, TRUE, st_ServiceConfig.st_Maker.tszUPFile, st_ServiceConfig.st_Maker.tszUPUrl))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("构建标准版本列表失败！错误：%lX"), UPHelpModule_GetLastError());
 			goto NETSERVICE_APPEXIT;
@@ -164,22 +163,27 @@ int main(int argc, char** argv)
 	BaseLib_OperatorMemory_Free((XPPPMEM)&ppSt_ListVer, nListCount);
 
 NETSERVICE_APPEXIT:
-	bIsRun = FALSE;
 
-	if (NULL != ptszUPDesp)
+	if (bIsRun)
 	{
-		delete[]ptszUPDesp;
-		ptszUPDesp = NULL;
-	}
-	if (NULL != ptszJsonMsg)
-	{
-		delete[]ptszJsonMsg;
-		ptszJsonMsg = NULL;
-	}
+		bIsRun = FALSE;
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("按任意键,服务器退出"));
 
-	UPData_DlParser_Close();
-	HelpComponents_XLog_Destroy(xhLog);
+		if (NULL != ptszUPDesp)
+		{
+			free(ptszUPDesp);
+			ptszUPDesp = NULL;
+		}
+		if (NULL != ptszJsonMsg)
+		{
+			free(ptszJsonMsg);
+			ptszJsonMsg = NULL;
+		}
 
+		UPData_DlParser_Close();
+		HelpComponents_XLog_Destroy(xhLog);
+		getchar();
+	}
 #ifdef _WINDOWS
 	WSACleanup();
 #endif
