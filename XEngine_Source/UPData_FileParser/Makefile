@@ -41,16 +41,9 @@ FileParser_ReadVersion.o:./FileParser_ReadVersion/FileParser_ReadVersion.cpp
 pch.o:pch.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) pch.cpp
 
-InstallAll:InstallSo InstallHeader
+InstallAll:InstallSo 
 InstallSo:./libUPData_FileParser.so
-ifeq ($(FILECENTOS), $(wildcard $(FILECENTOS)))
-	cp ./libUPData_FileParser.so ../../../XEngine_Release/XEngine_Linux/Centos/XEngine_UPData/libUPData_FileParser.so
-else
-	cp ./libUPData_FileParser.so ../../../XEngine_Release/XEngine_Linux/Ubuntu/XEngine_UPData/libUPData_FileParser.so
-endif
-InstallHeader:./FileParser_Define.h ./FileParser_Error.h
-	cp ./FileParser_Define.h ../../../XEngine_Release/XEngine_Include/XEngine_UPData/FileParser_Define.h
-	cp ./FileParser_Error.h ../../../XEngine_Release/XEngine_Include/XEngine_UPData/FileParser_Error.h
+	cp ./libUPData_FileParser.so ../../XEngine_Release/libUPData_FileParser.so
 
 
 CleanAll:CleanObj CleanMk

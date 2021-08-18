@@ -33,16 +33,9 @@ pch.o:pch.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) pch.cpp
 
 
-InstallAll:InstallSo InstallHeader
+InstallAll:InstallSo 
 InstallSo:./libUPData_Downloads.so
-ifeq ($(FILECENTOS), $(wildcard $(FILECENTOS)))
-	cp ./libUPData_Downloads.so ../../../XEngine_Release/XEngine_Linux/Centos/XEngine_UPData/libUPData_Downloads.so
-else
-	cp ./libUPData_Downloads.so ../../../XEngine_Release/XEngine_Linux/Ubuntu/XEngine_UPData/libUPData_Downloads.so
-endif
-InstallHeader:./UPDataDl_Define.h ./UPDataDl_Error.h
-	cp ./UPDataDl_Define.h ../../../XEngine_Release/XEngine_Include/XEngine_UPData/UPDataDl_Define.h
-	cp ./UPDataDl_Error.h ../../../XEngine_Release/XEngine_Include/XEngine_UPData/UPDataDl_Error.h
+	cp ./libUPData_Downloads.so ../../XEngine_Release/libUPData_Downloads.so
 
 
 CleanAll:CleanObj CleanMk

@@ -39,16 +39,9 @@ pch.o:pch.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) pch.cpp
 
 
-InstallAll:InstallSo InstallHeader
+InstallAll:InstallSo 
 InstallSo:./libUPData_HelpModule.so
-ifeq ($(FILECENTOS), $(wildcard $(FILECENTOS)))
-	cp ./libUPData_HelpModule.so ../../../XEngine_Release/XEngine_Linux/Centos/XEngine_UPData/libUPData_HelpModule.so
-else
-	cp ./libUPData_HelpModule.so ../../../XEngine_Release/XEngine_Linux/Ubuntu/XEngine_UPData/libUPData_HelpModule.so
-endif
-InstallHeader:./HelpModule_Define.h ./HelpModule_Error.h
-	cp ./HelpModule_Define.h ../../../XEngine_Release/XEngine_Include/XEngine_UPData/HelpModule_Define.h
-	cp ./HelpModule_Error.h ../../../XEngine_Release/XEngine_Include/XEngine_UPData/HelpModule_Error.h
+	cp ./libUPData_HelpModule.so ../../XEngine_Release/libUPData_HelpModule.so
 
 
 CleanAll:CleanObj CleanMk

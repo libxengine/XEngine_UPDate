@@ -90,6 +90,10 @@ BOOL CFileParser_ReadVersion::FileParser_ReadVer_GetRemote(LPCTSTR lpszJsonMsg, 
 	{
 		*pInt_Version = st_JsonRoot["MainVersion"].asInt64();
 	}
+	if (NULL != pStrDes)
+	{
+		*pStrDes = st_JsonRoot["MainDescription"].asString();
+	}
 	st_JsonArray = st_JsonRoot["UPList"];
 
 	//判断是否有文件存在

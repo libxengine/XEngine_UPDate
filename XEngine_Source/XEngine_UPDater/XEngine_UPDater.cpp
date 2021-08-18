@@ -13,7 +13,6 @@ void Signale_Handler(int sig)
 
 		UPData_DlParser_Close();
 		HelpComponents_XLog_Destroy(xhLog);
-		getchar();
 	}
 #ifdef _WINDOWS
 	WSACleanup();
@@ -30,9 +29,7 @@ int main(int argc, char** argv)
 #if (XENGINE_VERSION_KERNEL < 7) && (XENGINE_VERSION_MAIN < 19)
 	printf("XEngine版本过低,无法继续\n");
 #endif
-
 	bIsRun = TRUE;
-	int nDesLen = 1024000;
 	int nUPLen = 1024000;
 	int nListLocal = 0;
 	int nListRemote = 0;
@@ -40,22 +37,18 @@ int main(int argc, char** argv)
 	__int64x nLocalVer = 0;
 	string m_StrUPDes;
 
-	TCHAR* ptszUPDesp = NULL;
 	TCHAR* ptszJsonMsg = NULL;
-	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 	FILEPARSER_VERSIONINFO** ppSt_ListLocal;
 	FILEPARSER_VERSIONINFO** ppSt_ListRemote;
 	list<FILEPARSER_VERSIONINFO> stl_ListUPDate;
+	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
-	ptszUPDesp = (TCHAR*)malloc(nDesLen);
 	ptszJsonMsg = (TCHAR*)malloc(nUPLen);
-
-	if ((NULL == ptszUPDesp) || (NULL == ptszJsonMsg))
+	if (NULL == ptszJsonMsg)
 	{
 		printf("申请内存失败，无法继续！\n");
 		return 0;
 	}
-	memset(ptszUPDesp, '\0', nDesLen);
 	memset(ptszJsonMsg, '\0', nUPLen);
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
 	memset(&st_ServiceConfig, '\0', sizeof(XENGINE_SERVERCONFIG));
@@ -101,15 +94,13 @@ int main(int argc, char** argv)
 		goto NETSERVICE_APPEXIT;
 	}
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("获取网络引擎服务更新信息成功,开始获取是否存在新版本..."));
-	BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszJsonMsg);
-
+	
 	if (!FileParser_ReadVer_GetRemote(ptszJsonMsg, nUPLen, &ppSt_ListRemote, &nListRemote, &nRemoteVer, &m_StrUPDes))
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("获取更新,获取远程服务更新信息失败,错误:%lX"), UPFileParser_GetLastError());
 		goto NETSERVICE_APPEXIT;
 	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("获取更新,远程版本:%lld,最新内容:\r\n%s"), nRemoteVer, m_StrUPDes.c_str());
-
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("获取更新,远程版本:%lld,最新内容:%s"), nRemoteVer, m_StrUPDes.c_str());
 	if (!FileParser_ReadVer_GetLocal(st_ServiceConfig.tszLocalList, &ppSt_ListLocal, &nListLocal, &nLocalVer))
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("获取更新,获取本地文件信息失败,错误:%lX"), UPFileParser_GetLastError());
@@ -117,9 +108,10 @@ int main(int argc, char** argv)
 	}
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("获取更新,当前版本:%lld"), nLocalVer);
 
-	if (nRemoteVer < nLocalVer)
+	if (nLocalVer >= nRemoteVer)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("获取更新失败,没有新版本可以使用!"));
+		goto NETSERVICE_APPEXIT;
 	}
 
 	if (!FileParser_Match_Start(&ppSt_ListRemote, nListRemote, &ppSt_ListLocal, nListLocal, &stl_ListUPDate))
@@ -175,6 +167,7 @@ int main(int argc, char** argv)
 		goto NETSERVICE_APPEXIT;
 	}
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("更新成功,退出更新服务!"));
+
 	BaseLib_OperatorMemory_Free((XPPPMEM)&ppSt_ListLocal, nListLocal);
 	BaseLib_OperatorMemory_Free((XPPPMEM)&ppSt_ListRemote, nListRemote);
 
@@ -185,15 +178,9 @@ NETSERVICE_APPEXIT:
 		bIsRun = FALSE;
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("按任意键,服务器退出"));
 
-		if (NULL != ptszUPDesp)
-		{
-			free(ptszUPDesp);
-			ptszUPDesp = NULL;
-		}
 		if (NULL != ptszJsonMsg)
 		{
-			free(ptszJsonMsg);
-			ptszJsonMsg = NULL;
+			BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszJsonMsg);
 		}
 
 		UPData_DlParser_Close();
