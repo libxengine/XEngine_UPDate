@@ -16,8 +16,8 @@ public:
     CFileParser_ReadVersion();
     ~CFileParser_ReadVersion();
 public:
-    BOOL FileParser_ReadVer_GetUPVersion(LPCTSTR lpszWebHost,TCHAR *ptszUPMsg, int *pInt_Len);
-    BOOL FileParser_ReadVer_GetDescription(LPCTSTR lpszJsonMsg, int nMsgLen, TCHAR *ptszUPDes, int *pInt_Len);
+    BOOL FileParser_ReadVer_GetRemote(LPCTSTR lpszJsonMsg, int nMsgLen, FILEPARSER_VERSIONINFO*** pppSt_FileList, int* pInt_Count, __int64x* pInt_Version = NULL, string* pStrDes = NULL);
+	BOOL FileParser_ReadVer_GetLocal(LPCTSTR lpszFileList, FILEPARSER_VERSIONINFO*** pppSt_FileList, int* pInt_Count, __int64x* pInt_Version = NULL);
 protected:
 private:
 };

@@ -3,7 +3,7 @@ LIBRARY
 EXPORTS 
 	UPFileParser_GetLastError
 
-	FileParser_ReadVer_GetUPVersion
-	FileParser_ReadVer_GetDescription
+	FileParser_ReadVer_GetRemote
+	FileParser_ReadVer_GetRemote
 
 	FileParser_Match_Start
