@@ -33,7 +33,6 @@ BOOL CConfig_Ini::Config_Ini_File(LPCTSTR lpszConfigFile, XENGINE_SERVERCONFIG* 
         return FALSE;
     }
 	pSt_FileConfig->bIsDown = GetPrivateProfileInt(_T("ServiceConfig"), _T("bIsDown"), 0, lpszConfigFile);
-	pSt_FileConfig->bIsMake = GetPrivateProfileInt(_T("ServiceConfig"), _T("ThreadPool"), 0, lpszConfigFile);
 	GetPrivateProfileString(_T("ServiceConfig"), _T("tszUPUrl"), NULL, pSt_FileConfig->tszUPUrl, MAX_PATH, lpszConfigFile);
 	GetPrivateProfileString(_T("ServiceConfig"), _T("tszLocalList"), NULL, pSt_FileConfig->tszLocalList, MAX_PATH, lpszConfigFile);
 	GetPrivateProfileString(_T("ServiceConfig"), _T("tszDownPath"), NULL, pSt_FileConfig->tszDownPath, MAX_PATH, lpszConfigFile);

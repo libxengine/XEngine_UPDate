@@ -23,6 +23,14 @@ void Signale_Handler(int sig)
 
 int main(int argc, char** argv)
 {
+#ifdef _WINDOWS
+	WSADATA st_WSAData;
+	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
+#endif
+#if (XENGINE_VERSION_KERNEL < 7) && (XENGINE_VERSION_MAIN < 19)
+	printf("XEngine版本过低,无法继续\n");
+#endif
+
 	bIsRun = TRUE;
 	int nDesLen = 1024000;
 	int nUPLen = 1024000;
@@ -45,11 +53,6 @@ int main(int argc, char** argv)
 	memset(ptszJsonMsg, '\0', nUPLen);
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
 	memset(&st_ServiceConfig, '\0', sizeof(XENGINE_SERVERCONFIG));
-
-#ifdef _WINDOWS
-	WSADATA st_WSAData;
-	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
-#endif
 
 	if (!UPDater_Parament(argc, argv))
 	{

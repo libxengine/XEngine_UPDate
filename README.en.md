@@ -16,6 +16,8 @@ this software support following features
 2. Module update  
 3. file uncompress  
 4. auto run  
+5. Support relative path and absolute path
+6. Support delete file or dir when update
 
 ## install
 
@@ -73,6 +75,8 @@ make FLAGS=CleanAll clear
 - XEngine_Source   code    directory  
 
 ## Participate in contribution
+Since what we provide is a console method of checking and downloading updates, it may not meet your software needs too much  
+We welcome everyone to the FORK warehouse and modify the update program that suits you  
 
 1. Fork this code
 2. Create new Feat_xxx branch

@@ -651,7 +651,7 @@ BOOL CHelpModule_Api::HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen)
     st_JsonArray = st_JsonRoot["DelList"];
     for (unsigned int i = 0;i < st_JsonArray.size();i++)
     {
-        if (0 != remove(st_JsonArray[i]["ModuleName"].asCString()))
+        if (0 != remove(st_JsonArray[i].asCString()))
         {
             HelpModule_IsErrorOccur = TRUE;
             HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_HELPMODULE_API_CLEAR_DELFILE;
