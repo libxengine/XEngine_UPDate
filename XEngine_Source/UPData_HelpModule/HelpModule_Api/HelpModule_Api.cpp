@@ -40,17 +40,12 @@ CHelpModule_Api::~CHelpModule_Api()
   类型：整数型
   可空：N
   意思：输入JSON缓冲区大小
- 参数.四：pppSt_ListUPDataVer
+ 参数.四：pStl_ListUPDate
   In/Out：In
-  类型：三级指针
+  类型：容器指针
   可空：N
   意思：解析好的更新的文件列表,这个内存由调用者维护
- 参数.五：nListCount
-  In/Out：In
-  类型：整数型
-  可空：N
-  意思：输入文件列表个数
- 参数.六：lpszDlPath
+ 参数.五：lpszDlPath
   In/Out：In
   类型：常量字符指针
   可空：Y
@@ -62,18 +57,18 @@ CHelpModule_Api::~CHelpModule_Api()
       的信息为最新版本信息,然后执行你需要执行的文件和删除你需要删除的文件.部分操作可能需要权限才能执行
       比如:你需要安装到C盘的文件的你需要提供权限才能成功执行此函数
 *********************************************************************/
-BOOL CHelpModule_Api::HelpModule_Api_Install(LPCTSTR lpszLocalFile, LPCTSTR lpszRemoteJson, int nMsgLen, FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount, LPCTSTR lpszDlPath /* = NULL */)
+BOOL CHelpModule_Api::HelpModule_Api_Install(LPCTSTR lpszLocalFile, LPCTSTR lpszRemoteJson, int nMsgLen, list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, LPCTSTR lpszDlPath /* = NULL */)
 {
     HelpModule_IsErrorOccur = FALSE;
 
-    if ((NULL == lpszLocalFile) || (NULL == pppSt_ListUPDataVer))
+    if ((NULL == lpszLocalFile) || (NULL == pStl_ListUPDate))
     {
         HelpModule_IsErrorOccur = TRUE;
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_HELPMODULE_API_INSTAL_PARAMENT;
         return FALSE;
     }
 
-    if (!HelpModule_Api_Copy(pppSt_ListUPDataVer, nListCount, lpszDlPath))
+    if (!HelpModule_Api_Copy(pStl_ListUPDate, lpszDlPath))
     {
         return FALSE;
     }
@@ -81,7 +76,7 @@ BOOL CHelpModule_Api::HelpModule_Api_Install(LPCTSTR lpszLocalFile, LPCTSTR lpsz
     {
         return FALSE;
     }
-    if (!HelpModule_Api_RunExec(pppSt_ListUPDataVer, nListCount))
+    if (!HelpModule_Api_RunExec(pStl_ListUPDate))
     {
         return FALSE;
     }
@@ -285,17 +280,12 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
 /********************************************************************
 函数名称：HelpModule_Api_Copy
 函数功能：拷贝新文件到指定目录
- 参数.一：pppSt_ListUPDataVer
+ 参数.一：pStl_ListUPDate
   In/Out：In
-  类型：三级指针
+  类型：容器指针
   可空：N
   意思：更新的文件列表信息
- 参数.二：nListCount
-  In/Out：In
-  类型：整数型
-  可空：N
-  意思：文件列表个数
- 参数.三：lpszDlPath
+ 参数.二：lpszDlPath
   In/Out：In
   类型：常量字符指针
   可空：Y
@@ -305,40 +295,41 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
   意思：是否拷贝成功
 备注：
 *********************************************************************/
-BOOL CHelpModule_Api::HelpModule_Api_Copy(FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount,LPCTSTR lpszDlPath /* = NULL */)
+BOOL CHelpModule_Api::HelpModule_Api_Copy(list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, LPCTSTR lpszDlPath /* = NULL */)
 {
     HelpModule_IsErrorOccur = FALSE;
 
     TCHAR tszDlPath[1024];
     TCHAR tszCpPath[1024];
-    if ((NULL == pppSt_ListUPDataVer))
+    if ((NULL == pStl_ListUPDate))
     {
         HelpModule_IsErrorOccur = TRUE;
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_COPY_PARAMENT;
         return FALSE;
     }
-    for (int i = 0; i < nListCount; i++)
+    list<FILEPARSER_VERSIONINFO>::const_iterator stl_ListIterator = pStl_ListUPDate->begin();
+    for (; stl_ListIterator != pStl_ListUPDate->end(); stl_ListIterator++)
     {
         memset(tszDlPath, '\0', sizeof(tszDlPath));
         memset(tszCpPath, '\0', sizeof(tszCpPath));
         //获取下载的文件路径和名称 组合成可以拷贝的路径地址
         if (NULL != lpszDlPath)
         {
-            _stprintf_s(tszDlPath, _T("%s%s"), lpszDlPath, (*pppSt_ListUPDataVer)[i]->tszModuleName);
+            _stprintf_s(tszDlPath, _T("%s%s"), lpszDlPath, stl_ListIterator->tszModuleName);
         }
         else
         {
-            _tcscpy(tszDlPath, (*pppSt_ListUPDataVer)[i]->tszModuleName);
+            _tcscpy(tszDlPath, stl_ListIterator->tszModuleName);
         }
-        if (0 == (*pppSt_ListUPDataVer)[i]->st_LocalVersion.nModuleVersion)
+        if (0 == stl_ListIterator->st_LocalVersion.nModuleVersion)
         {
-            _stprintf_s(tszCpPath, _T("%s%s"), (*pppSt_ListUPDataVer)[i]->tszModulePath, (*pppSt_ListUPDataVer)[i]->tszModuleName);
+            _stprintf_s(tszCpPath, _T("%s%s"), stl_ListIterator->tszModulePath, stl_ListIterator->tszModuleName);
         }
         else
         {
-            _stprintf_s(tszCpPath, _T("%s%s"), (*pppSt_ListUPDataVer)[i]->st_LocalVersion.tszMoudelPath, (*pppSt_ListUPDataVer)[i]->st_LocalVersion.tszMoudelName);
+            _stprintf_s(tszCpPath, _T("%s%s"), stl_ListIterator->st_LocalVersion.tszMoudelPath, stl_ListIterator->st_LocalVersion.tszMoudelName);
         }
-        if (!SystemApi_File_CreateMutilFolder((*pppSt_ListUPDataVer)[i]->st_LocalVersion.tszMoudelPath))
+        if (!SystemApi_File_CreateMutilFolder(stl_ListIterator->st_LocalVersion.tszMoudelPath))
         {
             HelpModule_IsErrorOccur = TRUE;
             HelpModule_dwErrorCode = SystemApi_GetLastError();
@@ -560,40 +551,36 @@ BOOL CHelpModule_Api::HelpModule_Api_SetVersion(LPCTSTR lpszLocalFile, LPCTSTR l
 /********************************************************************
 函数名称：HelpModule_Api_RunExec
 函数功能：运行一个程序
- 参数.一：pppSt_ListUPDataVer
+ 参数.一：pStl_ListUPDate
   In/Out：In
-  类型：三级指针
+  类型：容器指针
   可空：N
   意思：文件更新运行列表
- 参数.二：nListCount
-  In/Out：In
-  类型：整数型
-  可空：N
-  意思：文件列表个数
 返回值
   类型：逻辑型
   意思：是否执行成功
 备注：
 *********************************************************************/
-BOOL CHelpModule_Api::HelpModule_Api_RunExec(FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount)
+BOOL CHelpModule_Api::HelpModule_Api_RunExec(list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate)
 {
     HelpModule_IsErrorOccur = FALSE;
 
-    if ((NULL == pppSt_ListUPDataVer))
+    if ((NULL == pStl_ListUPDate))
     {
         HelpModule_IsErrorOccur = TRUE;
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_RUN_PARAMENT;
         return FALSE;
     }
-    for (int i = 0; i < nListCount; i++)
+    list<FILEPARSER_VERSIONINFO>::const_iterator stl_ListIterator = pStl_ListUPDate->begin();
+    for (; stl_ListIterator != pStl_ListUPDate->end(); stl_ListIterator++)
     {
         //判断要执行的文件
-        if ((*pppSt_ListUPDataVer)[i]->bIsRun)
+        if (stl_ListIterator->bIsRun)
         {
             TCHAR tszPath[1024];
             memset(tszPath, '\0', sizeof(tszPath));
             //判断目录时候需要改变
-            _stprintf_s(tszPath, _T("systemctl start %s%s"), (*pppSt_ListUPDataVer)[i]->st_LocalVersion.tszMoudelPath, (*pppSt_ListUPDataVer)[i]->st_LocalVersion.tszMoudelName);
+            _stprintf_s(tszPath, _T("systemctl start %s%s"), stl_ListIterator->st_LocalVersion.tszMoudelPath, stl_ListIterator->st_LocalVersion.tszMoudelName);
             if (-1 == system(tszPath))
             {
                 HelpModule_IsErrorOccur = TRUE;

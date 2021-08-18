@@ -29,9 +29,9 @@ extern "C" DWORD UPHelpModule_GetLastError(int* pInt_SysError)
 /************************************************************************/
 /*                           帮助函数导出                               */
 /************************************************************************/
-extern "C" BOOL HelpModule_Api_Install(LPCTSTR lpszLocalFile, LPCTSTR lpszRemoteJson, int nMsgLen, FILEPARSER_VERSIONINFO * **pppSt_ListUPDataVer, int nListCount, LPCTSTR lpszDlPath)
+extern "C" BOOL HelpModule_Api_Install(LPCTSTR lpszLocalFile, LPCTSTR lpszRemoteJson, int nMsgLen, list<FILEPARSER_VERSIONINFO>*pStl_ListUPDate, LPCTSTR lpszDlPath)
 {
-	return m_HelpApi.HelpModule_Api_Install(lpszLocalFile, lpszRemoteJson, nMsgLen, pppSt_ListUPDataVer, nListCount, lpszDlPath);
+	return m_HelpApi.HelpModule_Api_Install(lpszLocalFile, lpszRemoteJson, nMsgLen, pStl_ListUPDate, lpszDlPath);
 }
 extern "C" BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, __int64x nFileVer, BOOL bSubDir, LPCTSTR lpszUPFile, LPCTSTR lpszDlUrl, LPCTSTR lpszCfgPath)
 {

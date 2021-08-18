@@ -35,17 +35,12 @@ extern "C" DWORD UPHelpModule_GetLastError(int *pInt_SysError = NULL);
   类型：整数型
   可空：N
   意思：输入JSON缓冲区大小
- 参数.四：pppSt_ListUPDataVer
+ 参数.四：pStl_ListUPDate
   In/Out：In
-  类型：三级指针
+  类型：容器指针
   可空：N
   意思：解析好的更新的文件列表,这个内存由调用者维护
- 参数.五：nListCount
-  In/Out：In
-  类型：整数型
-  可空：N
-  意思：输入文件列表个数
- 参数.六：lpszDlPath
+ 参数.五：lpszDlPath
   In/Out：In
   类型：常量字符指针
   可空：Y
@@ -57,7 +52,7 @@ extern "C" DWORD UPHelpModule_GetLastError(int *pInt_SysError = NULL);
       的信息为最新版本信息,然后执行你需要执行的文件和删除你需要删除的文件.部分操作可能需要权限才能执行
       比如:你需要安装到C盘的文件的你需要提供权限才能成功执行此函数
 *********************************************************************/
-extern "C" BOOL HelpModule_Api_Install(LPCSTR lpszLocalFile, LPCSTR lpszRemoteJson, int nMsgLen, FILEPARSER_VERSIONINFO * **pppSt_ListUPDataVer, int nListCount, LPCSTR lpszDlPath = NULL);
+extern "C" BOOL HelpModule_Api_Install(LPCSTR lpszLocalFile, LPCSTR lpszRemoteJson, int nMsgLen, list<FILEPARSER_VERSIONINFO>*pStl_ListUPDate, LPCSTR lpszDlPath = NULL);
 /********************************************************************
 函数名称：HelpModule_Api_BuildVer
 函数功能：构建应用更新文件
