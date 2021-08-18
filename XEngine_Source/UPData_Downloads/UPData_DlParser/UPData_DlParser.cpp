@@ -37,17 +37,12 @@ CUPData_DlParser::~CUPData_DlParser()
   类型：常量字符指针
   可空：N
   意思：要下载到的目录
- 参数.二：pppSt_ListUPDataVer
+ 参数.二：pStl_ListUPDate
   In/Out：In
-  类型：三级指针
+  类型：STL容器指针
   可空：N
-  意思：传递解析好的LIST列表,这个内存由调用者维护
- 参数.三：nListCount
-  In/Out：In
-  类型：三级指针
-  可空：N
-  意思：列表个数
- 参数.四：bIsAll
+  意思：更新文件列表
+ 参数.三：bIsAll
   In/Out：In
   类型：逻辑型
   可空：Y
@@ -57,11 +52,11 @@ CUPData_DlParser::~CUPData_DlParser()
   意思：是否初始化成功
 备注：
 *********************************************************************/
-BOOL CUPData_DlParser::UPData_DlParser_Init(LPCTSTR lpszDownloadPath, FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount,BOOL bIsAll /* = FALSE */)
+BOOL CUPData_DlParser::UPData_DlParser_Init(LPCTSTR lpszDownloadPath, list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, BOOL bIsAll /* = FALSE */)
 {
     UPData_IsErrorOccur = FALSE;
 
-    if (NULL == lpszDownloadPath || NULL == pppSt_ListUPDataVer)
+    if (NULL == lpszDownloadPath || NULL == pStl_ListUPDate)
     {
         UPData_IsErrorOccur = TRUE;
         UPData_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_INIT_PARAMENT;
@@ -74,12 +69,9 @@ BOOL CUPData_DlParser::UPData_DlParser_Init(LPCTSTR lpszDownloadPath, FILEPARSER
         return FALSE;
     }
     m_bAll = bIsAll;
-    m_nDlCount = nListCount;
+    m_nDlCount = pStl_ListUPDate->size();
     //把要下载的信息压入到LIST容器中
-    for (int i = 0; i < nListCount; i++)
-    {
-        stl_ListVersion.push_back(*(*pppSt_ListUPDataVer)[i]);
-    }
+    stl_ListVersion = *pStl_ListUPDate;
     _tcscpy(tszDlPath, lpszDownloadPath);
     m_bRun = TRUE;
     pSTDThread_Down = make_shared<std::thread>(UPData_DlParser_ThreadDown, this);

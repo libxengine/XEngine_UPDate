@@ -22,8 +22,8 @@ public:
     CUPData_DlParser();
     ~CUPData_DlParser();
 public:
-    BOOL UPData_DlParser_Init(LPCTSTR lpszDownloadPath,FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount,BOOL bIsAll = FALSE);
-    BOOL UPData_DlParser_CBQuery(CALLBACK_XENGINE_UPDATA_DOWNLOAD_PARSER_PROGRESS fpCall_DownloadProgress,LPVOID lParam = NULL);
+	BOOL UPData_DlParser_Init(LPCTSTR lpszDownloadPath, list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, BOOL bIsAll = FALSE);
+	BOOL UPData_DlParser_CBQuery(CALLBACK_XENGINE_UPDATA_DOWNLOAD_PARSER_PROGRESS fpCall_DownloadProgress, LPVOID lParam = NULL);
     BOOL UPData_DlParser_Close();
 protected:
     BOOL UPData_DlParser_GetRate(int nDownCount,int nDownSize,int nAllSize,int *pInt_DownRate,int *pInt_AllRate);

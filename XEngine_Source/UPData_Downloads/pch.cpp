@@ -29,9 +29,9 @@ extern "C" DWORD UPDataDown_GetLastError(int* pInt_SysError)
 /************************************************************************/
 /*                     下载器导出函数                                   */
 /************************************************************************/
-extern "C" BOOL UPData_DlParser_Init(LPCTSTR lpszDownloadPath, FILEPARSER_VERSIONINFO * **pppSt_ListUPDataVer, int nListCount, BOOL bIsAll)
+extern "C" BOOL UPData_DlParser_Init(LPCTSTR lpszDownloadPath, list<FILEPARSER_VERSIONINFO>*pStl_ListUPDate, BOOL bIsAll)
 {
-	return m_UPDataParser.UPData_DlParser_Init(lpszDownloadPath, pppSt_ListUPDataVer, nListCount, bIsAll);
+	return m_UPDataParser.UPData_DlParser_Init(lpszDownloadPath, pStl_ListUPDate, bIsAll);
 }
 extern "C" BOOL UPData_DlParser_CBQuery(CALLBACK_XENGINE_UPDATA_DOWNLOAD_PARSER_PROGRESS fpCall_DownloadProgress, LPVOID lParam)
 {
