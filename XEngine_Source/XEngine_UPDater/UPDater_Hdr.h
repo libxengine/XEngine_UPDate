@@ -7,12 +7,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include <string>
+#include <list>
+#include <thread>
+using namespace std;
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Define.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Error.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Define.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Error.h>
+#include <XEngine_Include/XEngine_SystemSdk/ProcFile_Define.h>
+#include <XEngine_Include/XEngine_SystemSdk/SystemApi_Define.h>
+#include <XEngine_Include/XEngine_SystemSdk/SystemApi_Error.h>
+#include <XEngine_Include/XEngine_NetHelp/APIHelp_Define.h>
+#include <XEngine_Include/XEngine_NetHelp/APIHelp_Error.h>
 #include "../UPData_FileParser/FileParser_Define.h"
 #include "../UPData_FileParser/FileParser_Error.h"
 #include "../UPData_Downloads/UPDataDl_Define.h"
@@ -43,9 +52,17 @@ extern XENGINE_SERVERCONFIG st_ServiceConfig;
 #pragma comment(lib,"Ws2_32.lib")
 #pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"x86/XEngine_HelpComponents/HelpComponents_XLog.lib")
+#pragma comment(lib,"x86/XEngine_SystemSdk/XEngine_SystemApi.lib")
+#pragma comment(lib,"x86/XEngine_NetHelp/NetHelp_APIHelp.lib")
+#ifdef _DEBUG
 #pragma comment(lib,"../Debug/UPData_FileParser.lib")
 #pragma comment(lib,"../Debug/UPData_Downloads.lib")
 #pragma comment(lib,"../Debug/UPData_HelpModule.lib")
 #pragma comment(lib,"../Debug/UPData_Configure.lib")
 #else
+#pragma comment(lib,"../Release/UPData_FileParser.lib")
+#pragma comment(lib,"../Release/UPData_Downloads.lib")
+#pragma comment(lib,"../Release/UPData_HelpModule.lib")
+#pragma comment(lib,"../Release/UPData_Configure.lib")
+#endif
 #endif

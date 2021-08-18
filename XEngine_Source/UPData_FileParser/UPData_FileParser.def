@@ -4,6 +4,6 @@ EXPORTS
 	UPFileParser_GetLastError
 
 	FileParser_ReadVer_GetRemote
-	FileParser_ReadVer_GetRemote
+	FileParser_ReadVer_GetLocal
 
 	FileParser_Match_Start

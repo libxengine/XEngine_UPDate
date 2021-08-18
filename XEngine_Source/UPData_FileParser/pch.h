@@ -31,8 +31,6 @@ using namespace std;
 #include <XEngine_Include/XEngine_Types.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Define.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Error.h>
-#include <XEngine_Include/XEngine_NetHelp/APIHelp_Define.h>
-#include <XEngine_Include/XEngine_NetHelp/APIHelp_Error.h>
 #include "FileParser_Define.h"
 #include "FileParser_Error.h"
 /********************************************************************
@@ -52,14 +50,11 @@ extern DWORD FileParser_dwErrorCode;
 #ifdef _WINDOWS
 #ifdef _DEBUG
 #pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x86/XEngine_NetHelp/NetHelp_APIHelp.lib")
 #else
 #ifdef _WIN64
 #pragma comment(lib,"x64/XEngine_NetHelp/XEngine_BaseLib.lib")
-#pragma comment(lib,"x64/XEngine_NetHelp/NetHelp_APIHelp.lib")
 #else
 #pragma comment(lib,"x86/XEngine_NetHelp/XEngine_BaseLib.lib")
-#pragma comment(lib,"x86/XEngine_NetHelp/NetHelp_APIHelp.lib")
 #endif // _WIN64
 #endif
 #else
