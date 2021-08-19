@@ -157,6 +157,7 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
     Json::Value st_JsonRemoteArray;
     Json::Value st_JsonRemoteObject;
     Json::Value st_JsonRemoteOPtion;
+    Json::StreamWriterBuilder st_JsonBuilder;
     //判断是否是自定义版本
     __int64x m_nFileVer = 0;
     if (0 == nFileVer)
@@ -256,8 +257,9 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
         st_JsonRemoteRoot["UPList"] = st_JsonRemoteArray;
         st_JsonRemoteRoot["DelList"] = st_JsonRemoteDel;
     }
+    st_JsonBuilder["emitUTF8"] = true;
     //写到JSON文件
-    if (!SystemApi_File_SaveBuffToFile(NULL, lpszLocalFile, st_JsonLocalRoot.toStyledString().c_str(), st_JsonLocalRoot.toStyledString().length()))
+    if (!SystemApi_File_SaveBuffToFile(NULL, lpszLocalFile, Json::writeString(st_JsonBuilder, st_JsonLocalRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonLocalRoot).length()))
     {
         HelpModule_IsErrorOccur = FALSE;
         HelpModule_dwErrorCode = SystemApi_GetLastError();
@@ -265,7 +267,7 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
     }
     if (NULL != lpszUPFile)
     {
-        if (!SystemApi_File_SaveBuffToFile(NULL, lpszUPFile, st_JsonRemoteRoot.toStyledString().c_str(), st_JsonRemoteRoot.toStyledString().length()))
+        if (!SystemApi_File_SaveBuffToFile(NULL, lpszUPFile, Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).length()))
         {
             HelpModule_IsErrorOccur = FALSE;
             HelpModule_dwErrorCode = SystemApi_GetLastError();
