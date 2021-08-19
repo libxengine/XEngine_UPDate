@@ -94,7 +94,7 @@ int main(int argc, char** argv)
 		goto NETSERVICE_APPEXIT;
 	}
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("获取网络引擎服务更新信息成功,开始获取是否存在新版本..."));
-	
+
 	if (!FileParser_ReadVer_GetRemote(ptszJsonMsg, nUPLen, &ppSt_ListRemote, &nListRemote, &nRemoteVer, &m_StrUPDes))
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("获取更新,获取远程服务更新信息失败,错误:%lX"), UPFileParser_GetLastError());

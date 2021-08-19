@@ -234,26 +234,28 @@ XHTHREAD CUPData_DlParser::UPData_DlParser_ThreadDown(LPVOID lParam)
     while (pClass_This->m_bRun)
     {
 		//判断下载个数是否超过指定个数
-		if (pClass_This->m_nDlNumber >= pClass_This->m_nDlNow)
+		if (pClass_This->m_nDlNumber > pClass_This->m_nDlNow)
 		{
-			for (; stl_ListIterator != pClass_This->stl_ListVersion.end(); stl_ListIterator++)
-			{
-				TCHAR tszPathFile[1024];
-				FILEVERSION_LIST st_FileList;
+            if (stl_ListIterator == pClass_This->stl_ListVersion.end())
+            {
+                break;
+            }
+			TCHAR tszPathFile[1024];
+			FILEVERSION_LIST st_FileList;
 
-				memset(tszPathFile, '\0', sizeof(tszPathFile));
-				memset(&st_FileList, '\0', sizeof(FILEVERSION_LIST));
+			memset(tszPathFile, '\0', sizeof(tszPathFile));
+			memset(&st_FileList, '\0', sizeof(FILEVERSION_LIST));
 
-				st_FileList.st_FileVer = *stl_ListIterator;
-				_stprintf_s(tszPathFile, _T("%s%s"), pClass_This->tszDlPath, st_FileList.st_FileVer.tszModuleName);
+			st_FileList.st_FileVer = *stl_ListIterator;
+			_stprintf_s(tszPathFile, _T("%s%s"), pClass_This->tszDlPath, st_FileList.st_FileVer.tszModuleName);
 
-				XNETHANDLE xhDown;
-				_tremove(tszPathFile);
-				//没有达到下载个数请求,开始创建下载任务
-                DownLoad_Http_Create(&xhDown, st_FileList.st_FileVer.tszModuleDownload, tszPathFile);
-				pClass_This->m_nDlNow++;
-				pClass_This->stl_MapVersion.insert(make_pair(xhDown, st_FileList));
-			}
+			XNETHANDLE xhDown;
+			_tremove(tszPathFile);
+			//没有达到下载个数请求,开始创建下载任务
+			DownLoad_Http_Create(&xhDown, st_FileList.st_FileVer.tszModuleDownload, tszPathFile);
+			pClass_This->m_nDlNow++;
+			pClass_This->stl_MapVersion.insert(make_pair(xhDown, st_FileList));
+            stl_ListIterator++;
 		}
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
@@ -284,30 +286,31 @@ XHTHREAD CUPData_DlParser::UPData_DlParser_ThreadEvent(LPVOID lParam)
             pClass_This->UPData_DlParser_GetRate(nDownCount, int(st_TaskInfo.dlNow), int(st_TaskInfo.dlTotal), &nDownRate, &nAllRate);
             if (ENUM_XENGINE_DOWNLOAD_STATUS_DOWNLOADDING == st_TaskInfo.en_DownStatus)
             {
-                pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, nDownRate, nAllRate, pClass_This->m_lParam);
+                pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, nDownRate, nAllRate, st_TaskInfo.en_DownStatus, pClass_This->m_lParam);
             }
             else
             {
-                pClass_This->m_nDlNow--;
-				//是否全部下载完毕
-				if (nDownCount == pClass_This->m_nDlCount)
+				if (!stl_MapIterator->second.bComplate)
 				{
-                    pClass_This->m_bRun = FALSE;
-					pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, 100, pClass_This->m_lParam);
-					break;
-				}
-				else
-				{
-					if (!stl_MapIterator->second.bComplate)
+					nDownCount++;
+					pClass_This->m_nDlNow--;
+					stl_MapIterator->second.bComplate = TRUE;
+                    //是否全部下载完毕
+					if (nDownCount == pClass_This->m_nDlCount)
 					{
-						stl_MapIterator->second.bComplate = TRUE;
-						nDownCount++;
+						pClass_This->m_bRun = FALSE;
+						pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, 100, st_TaskInfo.en_DownStatus, pClass_This->m_lParam);
+						break;
 					}
-					pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, nAllRate, pClass_This->m_lParam);
+					else
+					{
+
+						pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, nAllRate, st_TaskInfo.en_DownStatus, pClass_This->m_lParam);
+					}
 				}
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     return 0;
 }

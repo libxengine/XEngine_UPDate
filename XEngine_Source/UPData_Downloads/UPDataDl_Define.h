@@ -12,7 +12,7 @@
 *********************************************************************/
 //////////////////////////////////////////////////////////////////////////
 //文件名，下载大小，文件大小，文件下载百分比，总大小百分比，如果倒数第二个参数为100，那么表示全部下载完成
-typedef void(CALLBACK *CALLBACK_XENGINE_UPDATA_DOWNLOAD_PARSER_PROGRESS)(LPCSTR lpszFileName,double nDownSize,double nFileSize,int nRate,int nAllRate,LPVOID lParam);
+typedef void(CALLBACK* CALLBACK_XENGINE_UPDATA_DOWNLOAD_PARSER_PROGRESS)(LPCSTR lpszFileName, double nDownSize, double nFileSize, int nRate, int nAllRate, ENUM_DOWNENGINE_STATUS enDlStatus, LPVOID lParam);
 //////////////////////////////////////////////////////////////////////////
 //                     更新下载器导出函数
 //////////////////////////////////////////////////////////////////////////

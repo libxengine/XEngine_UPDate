@@ -340,7 +340,11 @@ BOOL CHelpModule_Api::HelpModule_Api_Copy(list<FILEPARSER_VERSIONINFO>* pStl_Lis
         TCHAR tszCmd[4096];
         memset(tszCmd,'\0',sizeof(tszCmd));
 
-        _stprintf_s(tszCmd,_T("cp -rf %s %s"),tszDlPath,tszCpPath);
+#ifdef _WINDOWS
+        _stprintf_s(tszCmd, _T("cp -rf %s %s"), tszDlPath, tszCpPath);
+#else
+        _stprintf_s(tszCmd, _T("copy /y %s %s"), tszDlPath, tszCpPath);
+#endif
         if (-1 == system(tszCmd))
         {
             HelpModule_IsErrorOccur = TRUE;
@@ -348,7 +352,7 @@ BOOL CHelpModule_Api::HelpModule_Api_Copy(list<FILEPARSER_VERSIONINFO>* pStl_Lis
             return FALSE;
         }
         //删除原始下载的文件
-        if (0 != remove(tszDlPath))
+        if (0 != _tremove(tszDlPath))
         {
             HelpModule_IsErrorOccur = TRUE;
             HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_COPY_DELFILE;

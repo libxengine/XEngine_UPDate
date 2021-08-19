@@ -22,6 +22,8 @@ using namespace std;
 #include <XEngine_Include/XEngine_SystemSdk/SystemApi_Error.h>
 #include <XEngine_Include/XEngine_NetHelp/APIHelp_Define.h>
 #include <XEngine_Include/XEngine_NetHelp/APIHelp_Error.h>
+#include <XEngine_Include/XEngine_DownLoad/DownLoad_Define.h>
+#include <XEngine_Include/XEngine_DownLoad/DownLoad_Error.h>
 #include "../UPData_FileParser/FileParser_Define.h"
 #include "../UPData_FileParser/FileParser_Error.h"
 #include "../UPData_Downloads/UPDataDl_Define.h"
