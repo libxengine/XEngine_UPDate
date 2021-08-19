@@ -75,7 +75,7 @@ BOOL CFileParser_Match::FileParser_Match_Start(FILEPARSER_VERSIONINFO*** pppSt_L
 				if ((*pppSt_ListRemote)[i]->nModuleVersion > (*pppSt_ListLocal)[j]->st_LocalVersion.nModuleVersion)
 				{
 					(*pppSt_ListRemote)[i]->st_LocalVersion = (*pppSt_ListLocal)[j]->st_LocalVersion;
-					pStl_ListUPDate->push_back(*(*pppSt_ListLocal)[j]);
+					pStl_ListUPDate->push_back(*(*pppSt_ListRemote)[i]);
 					break;
 				}
 				else

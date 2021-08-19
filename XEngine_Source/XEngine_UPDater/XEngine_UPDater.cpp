@@ -122,16 +122,21 @@ int main(int argc, char** argv)
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("匹配更新列表成功,需要更新的文件个数:%d..."), stl_ListUPDate.size());
 
 	{
+		if (stl_ListUPDate.empty())
+		{
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("有更新,但是更新列表为空,无法继续"));
+			goto NETSERVICE_APPEXIT;
+		}
 		list<FILEPARSER_VERSIONINFO>::const_iterator stl_ListIterator = stl_ListUPDate.begin();
 		for (; stl_ListIterator != stl_ListUPDate.end(); stl_ListIterator++)
 		{
 			if (0 == stl_ListIterator->st_LocalVersion.nModuleVersion)
 			{
-				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("增加一个模块，模块名称：%s，老模块版本:%ld,新模块版本:%ld"), stl_ListIterator->tszModuleName, stl_ListIterator->st_LocalVersion.nModuleVersion, stl_ListIterator->nModuleVersion);
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("增加一个模块，模块名称：%s，老模块版本:%lld,新模块版本:%lld"), stl_ListIterator->tszModuleName, stl_ListIterator->st_LocalVersion.nModuleVersion, stl_ListIterator->nModuleVersion);
 			}
 			else
 			{
-				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("更新一个模块，模块名称：%s，老模块版本:%ld,新模块版本:%ld"), stl_ListIterator->tszModuleName, stl_ListIterator->st_LocalVersion.nModuleVersion, stl_ListIterator->nModuleVersion);
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("更新一个模块，模块名称：%s，老模块版本:%lld,新模块版本:%lld"), stl_ListIterator->tszModuleName, stl_ListIterator->st_LocalVersion.nModuleVersion, stl_ListIterator->nModuleVersion);
 			}
 		}
 	}
