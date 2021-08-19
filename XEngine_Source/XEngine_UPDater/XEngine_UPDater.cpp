@@ -152,12 +152,12 @@ int main(int argc, char** argv)
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("清理临时文件成功！"));
 
 	UPData_DlParser_CBQuery(UPDater_Callback_Download);
-	if (!UPData_DlParser_Init(st_ServiceConfig.tszDownPath, &stl_ListUPDate, FALSE))
+	if (!UPData_DlParser_Init(st_ServiceConfig.tszDownPath, &stl_ListUPDate, st_ServiceConfig.nDlCount))
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("更新失败,初始化更新器失败,错误:%lX"), UPDataDown_GetLastError());
 		goto NETSERVICE_APPEXIT;
 	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("开始进行文件下载..."));
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("开始进行文件下载,允许同时下载个数:%d..."), st_ServiceConfig.nDlCount);
 
 	while (bIsRun)
 	{

@@ -22,7 +22,7 @@ public:
     CUPData_DlParser();
     ~CUPData_DlParser();
 public:
-	BOOL UPData_DlParser_Init(LPCTSTR lpszDownloadPath, list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, BOOL bIsAll = FALSE);
+    BOOL UPData_DlParser_Init(LPCTSTR lpszDownloadPath, list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, int nCount = 1);
 	BOOL UPData_DlParser_CBQuery(CALLBACK_XENGINE_UPDATA_DOWNLOAD_PARSER_PROGRESS fpCall_DownloadProgress, LPVOID lParam = NULL);
     BOOL UPData_DlParser_Close();
 protected:
@@ -33,8 +33,9 @@ protected:
 private:
     TCHAR tszDlPath[MAX_PATH];
     int m_nDlCount;
+    int m_nDlNumber;
+    int m_nDlNow;
     BOOL m_bRun;
-    BOOL m_bAll;
 private:
     shared_ptr<std::thread> pSTDThread_Down;
     shared_ptr<std::thread> pSTDThread_Event;
