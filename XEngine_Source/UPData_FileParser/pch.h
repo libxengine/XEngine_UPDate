@@ -52,9 +52,9 @@ extern DWORD FileParser_dwErrorCode;
 #pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #else
 #ifdef _WIN64
-#pragma comment(lib,"x64/XEngine_NetHelp/XEngine_BaseLib.lib")
+#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
 #else
-#pragma comment(lib,"x86/XEngine_NetHelp/XEngine_BaseLib.lib")
+#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #endif // _WIN64
 #endif
 #else
