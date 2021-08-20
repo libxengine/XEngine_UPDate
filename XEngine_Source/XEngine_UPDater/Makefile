@@ -2,8 +2,8 @@ CC = g++ -std=c++17 -Wall
 RELEASE = 0
 UNICODE = 0  
 FILECENTOS = /etc/redhat-release
-LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_HelpComponents -L ../UPData_Downloads -L ../UPData_FileParser -L ../UPData_HelpModule -L ../UPData_Configure
-LIB = -lXEngine_BaseLib -lHelpComponents_XLog -lUPData_FileParser -lUPData_Downloads -lUPData_HelpModule -lUPData_Configure
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_HelpComponents -L /usr/local/lib/XEngine_Release/XEngine_NetHelp -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk -L ../UPData_Downloads -L ../UPData_FileParser -L ../UPData_HelpModule -L ../UPData_Configure
+LIB = -lXEngine_BaseLib -lHelpComponents_XLog -lNetHelp_APIHelp -lXEngine_SystemApi -lUPData_FileParser -lUPData_Downloads -lUPData_HelpModule -lUPData_Configure
 LIBEX = -static-libgcc -ldl -lrt -lpthread
 LOADSO = -Wl,-rpath=./,--disable-new-dtags
 LIBINCLUDE = UPDater_Net.o UPDater_Config.o XEngine_UPDater.o
@@ -29,7 +29,7 @@ else
 endif
 
 all:$(LIBINCLUDE)
-	$(CC) $(DEBUG) $(LIBINCLUDE) -o XEngine_UPDaterApp.exe $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
+	$(CC) $(DEBUG) $(LIBINCLUDE) -o XEngine_UPDateApp.exe $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
   
 UPDater_Net.o:./UPDater_Net.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) ./UPDater_Net.cpp
@@ -38,10 +38,13 @@ UPDater_Config.o:./UPDater_Config.cpp
 XEngine_UPDater.o:./XEngine_UPDater.cpp             
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) ./XEngine_UPDater.cpp   
 
-
+InstallAll:InstallApp
+InstallApp:./XEngine_UPDateApp.exe
+	cp ./XEngine_UPDateApp.exe ../../XEngine_Release/XEngine_UPDateApp.exe
+	
 CleanAll:CleanObj CleanMk
 CleanObj:                                              
 	rm *.o
 CleanMk:                                  
-	rm XEngine_UPDaterApp.exe     
+	rm XEngine_UPDateApp.exe     
 	       

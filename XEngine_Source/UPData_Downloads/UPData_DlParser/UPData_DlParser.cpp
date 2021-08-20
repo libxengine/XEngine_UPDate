@@ -13,9 +13,10 @@
 *********************************************************************/
 CUPData_DlParser::CUPData_DlParser()
 {
-    m_nDlCount = 0;
     m_bRun = FALSE;
-    m_bAll = FALSE;
+    m_nDlCount = 0;
+    m_nDlNumber = 0;
+    m_nDlNow = 0;
 
     stl_ListVersion.clear();
     stl_MapVersion.clear();
@@ -37,31 +38,26 @@ CUPData_DlParser::~CUPData_DlParser()
   类型：常量字符指针
   可空：N
   意思：要下载到的目录
- 参数.二：pppSt_ListUPDataVer
+ 参数.二：pStl_ListUPDate
   In/Out：In
-  类型：三级指针
+  类型：STL容器指针
   可空：N
-  意思：传递解析好的LIST列表,这个内存由调用者维护
- 参数.三：nListCount
+  意思：更新文件列表
+ 参数.三：nCount
   In/Out：In
-  类型：三级指针
-  可空：N
-  意思：列表个数
- 参数.四：bIsAll
-  In/Out：In
-  类型：逻辑型
+  类型：整数型
   可空：Y
-  意思：是否全部同时下载，不填，默认否，一个一个下载，否则就是全部同时下载,文件过多建议一个一个下
+  意思：允许多少个下载任务同时存在，默认一个
 返回值
   类型：逻辑型
   意思：是否初始化成功
 备注：
 *********************************************************************/
-BOOL CUPData_DlParser::UPData_DlParser_Init(LPCTSTR lpszDownloadPath, FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount,BOOL bIsAll /* = FALSE */)
+BOOL CUPData_DlParser::UPData_DlParser_Init(LPCTSTR lpszDownloadPath, list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, int nCount /* = 1 */)
 {
     UPData_IsErrorOccur = FALSE;
 
-    if (NULL == lpszDownloadPath || NULL == pppSt_ListUPDataVer)
+    if (NULL == lpszDownloadPath || NULL == pStl_ListUPDate)
     {
         UPData_IsErrorOccur = TRUE;
         UPData_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_INIT_PARAMENT;
@@ -73,13 +69,10 @@ BOOL CUPData_DlParser::UPData_DlParser_Init(LPCTSTR lpszDownloadPath, FILEPARSER
         UPData_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_INIT_RUNNING;
         return FALSE;
     }
-    m_bAll = bIsAll;
-    m_nDlCount = nListCount;
+    m_nDlNumber = nCount;
+    m_nDlCount = pStl_ListUPDate->size();
     //把要下载的信息压入到LIST容器中
-    for (int i = 0; i < nListCount; i++)
-    {
-        stl_ListVersion.push_back(*(*pppSt_ListUPDataVer)[i]);
-    }
+    stl_ListVersion = *pStl_ListUPDate;
     _tcscpy(tszDlPath, lpszDownloadPath);
     m_bRun = TRUE;
     pSTDThread_Down = make_shared<std::thread>(UPData_DlParser_ThreadDown, this);
@@ -143,10 +136,6 @@ BOOL CUPData_DlParser::UPData_DlParser_Close()
 {
     UPData_IsErrorOccur = FALSE;
 
-    if (!m_bRun)
-    {
-        return TRUE;
-    }
     m_bRun = FALSE;
     //结束事件线程
     if (pSTDThread_Event->joinable())
@@ -164,7 +153,6 @@ BOOL CUPData_DlParser::UPData_DlParser_Close()
     {
         DownLoad_Http_Delete(stl_MapIterator->first);
     }
-    m_bAll = FALSE;
     memset(tszDlPath,'\0',sizeof(tszDlPath));
 
     stl_ListVersion.clear();
@@ -241,79 +229,37 @@ BOOL CUPData_DlParser::UPData_DlParser_GetRate(int nDownCount,int nDownSize,int 
 XHTHREAD CUPData_DlParser::UPData_DlParser_ThreadDown(LPVOID lParam)
 {
     CUPData_DlParser *pClass_This = (CUPData_DlParser *)lParam;
-    TCHAR tszPathFile[1024];
-
+    
     list<FILEPARSER_VERSIONINFO>::const_iterator stl_ListIterator = pClass_This->stl_ListVersion.begin();
-    for (int i = 0;stl_ListIterator != pClass_This->stl_ListVersion.end();stl_ListIterator++,i++)
+    while (pClass_This->m_bRun)
     {
-        XNETHANDLE xhDown;
-        FILEVERSION_LIST st_FileList;
+		//判断下载个数是否超过指定个数
+		if (pClass_This->m_nDlNumber > pClass_This->m_nDlNow)
+		{
+            if (stl_ListIterator == pClass_This->stl_ListVersion.end())
+            {
+                break;
+            }
+			TCHAR tszPathFile[1024];
+			FILEVERSION_LIST st_FileList;
 
-        memset(tszPathFile,'\0',sizeof(tszPathFile));
-        memset(&st_FileList,'\0',sizeof(FILEVERSION_LIST));
-        st_FileList.st_FileVer = *stl_ListIterator;
-        _stprintf_s(tszPathFile,_T("%s%s"),pClass_This->tszDlPath, st_FileList.st_FileVer.tszModuleName);
-        //判断是否全部同时下载
-        if (pClass_This->m_bAll)
-        {
-            //如果是
-            _tremove(tszPathFile);
-            if (!DownLoad_Http_Create(&xhDown, st_FileList.st_FileVer.tszModuleDownload, tszPathFile))
-            {
-                continue;
-            }
-            pClass_This->stl_MapVersion.insert(make_pair(xhDown, st_FileList));
-        }
-        else
-        {
-            //创建下载任务
-            _tremove(tszPathFile);
-            if (!DownLoad_Http_Create(&xhDown, st_FileList.st_FileVer.tszModuleDownload, tszPathFile))
-            {
-                //DWORD dwRet = Download_GetLastError();
-                continue;
-            }
-            pClass_This->stl_MapVersion.insert(make_pair(xhDown, st_FileList));
-            //等待下载完成
-            NETDOWNLOAD_TASKINFO st_TaskInfo;
-            memset(&st_TaskInfo, '\0', sizeof(NETDOWNLOAD_TASKINFO));
-            //查询下载任务
-            while (TRUE)
-            {
-                if (!DownLoad_Http_Query(xhDown, &st_TaskInfo))
-                {
-                    break;
-                }
-                //开始获取和计算设置回调
-                int nDownRate = 0;
-                int nAllRate = 0;
-                //获取下载百分比
-                if (!pClass_This->UPData_DlParser_GetRate(i, (int)st_TaskInfo.dlNow, (int)st_TaskInfo.dlTotal, &nDownRate, &nAllRate) && (ENUM_XENGINE_DOWNLOAD_STATUS_COMPLETE != st_TaskInfo.en_DownStatus) && (ENUM_XENGINE_DOWNLOAD_STATUS_ERROR != st_TaskInfo.en_DownStatus))
-                {
-                    continue;
-                }
-                //下载是否完成
-                if ((ENUM_XENGINE_DOWNLOAD_STATUS_COMPLETE == st_TaskInfo.en_DownStatus) || (ENUM_XENGINE_DOWNLOAD_STATUS_ERROR == st_TaskInfo.en_DownStatus))
-                {
-                    int nCountRate = pClass_This->m_nDlCount - 1;
-                    if (i == nCountRate)
-                    {
-                        pClass_This->lpCall_DownloadProgress(st_FileList.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, 100, pClass_This->m_lParam);
-                    }
-                    else
-                    {
-                        pClass_This->lpCall_DownloadProgress(st_FileList.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, nAllRate, pClass_This->m_lParam);
-                    }
-                    break;
-                }
-                else
-                {
-                    pClass_This->lpCall_DownloadProgress(st_FileList.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, nDownRate, nAllRate, pClass_This->m_lParam);
-                }
-            }
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			memset(tszPathFile, '\0', sizeof(tszPathFile));
+			memset(&st_FileList, '\0', sizeof(FILEVERSION_LIST));
+
+			st_FileList.st_FileVer = *stl_ListIterator;
+			_stprintf_s(tszPathFile, _T("%s%s"), pClass_This->tszDlPath, st_FileList.st_FileVer.tszModuleName);
+
+			XNETHANDLE xhDown;
+			_tremove(tszPathFile);
+			//没有达到下载个数请求,开始创建下载任务
+			DownLoad_Http_Create(&xhDown, st_FileList.st_FileVer.tszModuleDownload, tszPathFile);
+			pClass_This->m_nDlNow++;
+			pClass_This->stl_MapVersion.insert(make_pair(xhDown, st_FileList));
+            stl_ListIterator++;
+		}
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+
     return 0;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -321,53 +267,50 @@ XHTHREAD CUPData_DlParser::UPData_DlParser_ThreadDown(LPVOID lParam)
 XHTHREAD CUPData_DlParser::UPData_DlParser_ThreadEvent(LPVOID lParam)
 {
     CUPData_DlParser *pClass_This = (CUPData_DlParser *)lParam;
-    NETDOWNLOAD_TASKINFO st_TaskInfo;
+    
     int nDownCount = 0;
-
-    while (pClass_This->m_bRun && pClass_This->m_bAll)
+    while (pClass_This->m_bRun)
     {
         unordered_map<XNETHANDLE, FILEVERSION_LIST>::iterator stl_MapIterator = pClass_This->stl_MapVersion.begin();
         for (;stl_MapIterator != pClass_This->stl_MapVersion.end();stl_MapIterator++)
         {
+            NETDOWNLOAD_TASKINFO st_TaskInfo;
             memset(&st_TaskInfo, '\0', sizeof(NETDOWNLOAD_TASKINFO));
             if (!DownLoad_Http_Query(stl_MapIterator->first, &st_TaskInfo))
             {
                 continue;
             }
-            //开始获取和计算设置回调
             int nDownRate = 0;
             int nAllRate = 0;
             //获取下载百分比
-            if (!pClass_This->UPData_DlParser_GetRate(nDownCount, int(st_TaskInfo.dlNow), int(st_TaskInfo.dlTotal), &nDownRate, &nAllRate) && (ENUM_XENGINE_DOWNLOAD_STATUS_COMPLETE != st_TaskInfo.en_DownStatus) && (ENUM_XENGINE_DOWNLOAD_STATUS_ERROR != st_TaskInfo.en_DownStatus))
+            pClass_This->UPData_DlParser_GetRate(nDownCount, int(st_TaskInfo.dlNow), int(st_TaskInfo.dlTotal), &nDownRate, &nAllRate);
+            if (ENUM_XENGINE_DOWNLOAD_STATUS_DOWNLOADDING == st_TaskInfo.en_DownStatus)
             {
-                continue;
-            }
-
-            if ((ENUM_XENGINE_DOWNLOAD_STATUS_COMPLETE == st_TaskInfo.en_DownStatus) || (ENUM_XENGINE_DOWNLOAD_STATUS_ERROR == st_TaskInfo.en_DownStatus))
-            {
-                int nCountRate = pClass_This->m_nDlCount;
-                if (nDownCount == nCountRate)
-                {
-                    pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, 100, pClass_This->m_lParam);
-                    pClass_This->m_bAll = FALSE;
-                    break;
-                }
-                else
-                {
-                    if (!stl_MapIterator->second.bComplate)
-                    {
-                        stl_MapIterator->second.bComplate = TRUE;
-                        nDownCount++;
-                    }
-                    pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, nAllRate, pClass_This->m_lParam);
-                }
+                pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, nDownRate, nAllRate, st_TaskInfo.en_DownStatus, pClass_This->m_lParam);
             }
             else
             {
-                pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, nDownRate, nAllRate, pClass_This->m_lParam);
+				if (!stl_MapIterator->second.bComplate)
+				{
+					nDownCount++;
+					pClass_This->m_nDlNow--;
+					stl_MapIterator->second.bComplate = TRUE;
+                    //是否全部下载完毕
+					if (nDownCount == pClass_This->m_nDlCount)
+					{
+						pClass_This->m_bRun = FALSE;
+						pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, 100, st_TaskInfo.en_DownStatus, pClass_This->m_lParam);
+						break;
+					}
+					else
+					{
+
+						pClass_This->lpCall_DownloadProgress(stl_MapIterator->second.st_FileVer.tszModuleName, st_TaskInfo.dlNow, st_TaskInfo.dlTotal, 100, nAllRate, st_TaskInfo.en_DownStatus, pClass_This->m_lParam);
+					}
+				}
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     return 0;
 }

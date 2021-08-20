@@ -77,16 +77,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../../../../WIN_Env/jsoncpp/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../../../WIN_Env/jsoncpp/lib_json/Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(XEngine_Include);$(IncludePath)</IncludePath>
+    <LibraryPath>$(XEngine_Library);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../../../../WIN_Env/jsoncpp/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../../../WIN_Env/jsoncpp/lib_json/x64/Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(XEngine_Include);$(IncludePath)</IncludePath>
+    <LibraryPath>$(XEngine_Library);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -127,8 +127,8 @@
       <ModuleDefinitionFile>UPData_HelpModule.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)Release\UPData_HelpModule.lib" "../../../XEngine_Release/XEngine_Windows/x86/XEngine_UPData/UPData_HelpModule.lib"
-copy "$(SolutionDir)Release\UPData_HelpModule.dll" "../../../XEngine_Release/XEngine_Windows/x86/XEngine_UPData/UPData_HelpModule.dll"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -169,8 +169,8 @@ copy "$(SolutionDir)Release\UPData_HelpModule.dll" "../../../XEngine_Release/XEn
       <ModuleDefinitionFile>UPData_HelpModule.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)x64\Release\UPData_HelpModule.lib" "../../../XEngine_Release/XEngine_Windows/x64/XEngine_UPData/UPData_HelpModule.lib"
-copy "$(SolutionDir)x64\Release\UPData_HelpModule.dll" "../../../XEngine_Release/XEngine_Windows/x64/XEngine_UPData/UPData_HelpModule.dll"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

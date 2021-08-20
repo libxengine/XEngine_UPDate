@@ -13,7 +13,6 @@
 //////////////////////////////////////////////////////////////////////////
 //                    错误码导出
 //////////////////////////////////////////////////////////////////////////
-#define ERROR_XENGINE_UPDATA_HELPMODULE_API_INSTAL_PARAMENT 0xA3001000  //安装失败，参数错误
 #define ERROR_XENGINE_UPDATA_HELPMODULE_API_CLEAR_PARAMENT 0xA3001001   //清理失败，参数错误
 #define ERROR_XENGINE_UPDATA_HELPMODULE_API_CLEAR_DELFILE 0xA3001002    //删除文件出现错误，失败
 #define ERROR_XENGINE_UPDATA_HELPMODULE_API_CLEAR_PARSE 0xA3001003      //解析要删除的文件失败

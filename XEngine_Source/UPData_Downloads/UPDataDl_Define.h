@@ -12,7 +12,7 @@
 *********************************************************************/
 //////////////////////////////////////////////////////////////////////////
 //文件名，下载大小，文件大小，文件下载百分比，总大小百分比，如果倒数第二个参数为100，那么表示全部下载完成
-typedef void(CALLBACK *CALLBACK_XENGINE_UPDATA_DOWNLOAD_PARSER_PROGRESS)(LPCSTR lpszFileName,double nDownSize,double nFileSize,int nRate,int nAllRate,LPVOID lParam);
+typedef void(CALLBACK* CALLBACK_XENGINE_UPDATA_DOWNLOAD_PARSER_PROGRESS)(LPCSTR lpszFileName, double nDownSize, double nFileSize, int nRate, int nAllRate, ENUM_DOWNENGINE_STATUS enDlStatus, LPVOID lParam);
 //////////////////////////////////////////////////////////////////////////
 //                     更新下载器导出函数
 //////////////////////////////////////////////////////////////////////////
@@ -28,17 +28,12 @@ extern "C" DWORD UPDataDown_GetLastError(int *pInt_SysError = NULL);
   类型：常量字符指针
   可空：N
   意思：要下载到的目录
- 参数.二：pppSt_ListUPDataVer
+ 参数.二：pStl_ListUPDate
   In/Out：In
-  类型：三级指针
+  类型：STL容器指针
   可空：N
-  意思：传递解析好的LIST列表,这个内存由调用者维护
- 参数.三：nListCount
-  In/Out：In
-  类型：三级指针
-  可空：N
-  意思：列表个数
- 参数.四：bIsAll
+  意思：更新文件列表
+ 参数.三：bIsAll
   In/Out：In
   类型：逻辑型
   可空：Y
@@ -48,7 +43,7 @@ extern "C" DWORD UPDataDown_GetLastError(int *pInt_SysError = NULL);
   意思：是否初始化成功
 备注：
 *********************************************************************/
-extern "C" BOOL UPData_DlParser_Init(LPCSTR lpszDownloadPath, FILEPARSER_VERSIONINFO * **pppSt_ListUPDataVer, int nListCount,BOOL bIsAll = FALSE);
+extern "C" BOOL UPData_DlParser_Init(LPCSTR lpszDownloadPath, list<FILEPARSER_VERSIONINFO>*pStl_ListUPDate, BOOL bIsAll = FALSE);
 /********************************************************************
 函数名称：UPData_DlParser_CBQuery
 函数功能：设置查询回调函数

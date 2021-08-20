@@ -17,9 +17,5 @@ public:
     CFileParser_Match();
     ~CFileParser_Match();
 public:
-    BOOL FileParser_Match_Start(LPCTSTR lpszFileName, LPCTSTR lpszJsonMsg, int nMsgLen, FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int* pInt_ListCount,__int64x *pInt_LocalVer = NULL,__int64x *pInt_NewVer = NULL);
-protected:
-    BOOL FileParser_Match_InitFile(LPCTSTR lpszMsgBuffer, int nMsgLen, __int64x *pInt_LocalVersion, list<FILEPARSER_VERSIONINFO> *pStl_ListCurrentVer);
-    BOOL FileParser_Match_FileVersion(FILEPARSER_VERSIONINFO *pSt_VersionInfo, list<FILEPARSER_VERSIONINFO> *pStl_ListCurrentVer);
-private:
+    BOOL FileParser_Match_Start(FILEPARSER_VERSIONINFO*** pppSt_ListRemote, int nRemoteCount, FILEPARSER_VERSIONINFO*** pppSt_ListLocal, int nLocalCount, list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate);
 };

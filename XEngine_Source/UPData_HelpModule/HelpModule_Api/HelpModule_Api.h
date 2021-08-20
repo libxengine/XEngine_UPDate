@@ -23,13 +23,13 @@ public:
     CHelpModule_Api();
     ~CHelpModule_Api();
 public:
-    BOOL HelpModule_Api_Install(LPCTSTR lpszLocalFile, LPCTSTR lpszRemoteJson, int nMsgLen, FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount, LPCTSTR lpszDlPath = NULL);
+    BOOL HelpModule_Api_Copy(list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, LPCTSTR lpszDlPath = NULL, BOOL bDelFile = TRUE);
+	BOOL HelpModule_Api_SetVersion(LPCTSTR lpszLocalFile, LPCTSTR lpszMsgBuffer, int nMsgLen);
+	BOOL HelpModule_Api_RunExec(list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate);
+	BOOL HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen);
     BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, __int64x nFileVer = 0, BOOL bSubDir = TRUE, LPCTSTR lpszUPFile = NULL, LPCTSTR lpszDlUrl = NULL,LPCTSTR lpszCfgPath = NULL);
 protected:
-    BOOL HelpModule_Api_Copy(FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount,LPCTSTR lpszDlPath = NULL);
-    BOOL HelpModule_Api_SetVersion(LPCTSTR lpszLocalFile, LPCTSTR lpszMsgBuffer, int nMsgLen);
-    BOOL HelpModule_Api_RunExec(FILEPARSER_VERSIONINFO*** pppSt_ListUPDataVer, int nListCount);
-    BOOL HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen);
+
 protected:
     static BOOL CALLBACK HelpModule_Api_EnumFile(LPCSTR lpFileOrPath, BOOL bFindPath, LPVOID lParam);
 private:

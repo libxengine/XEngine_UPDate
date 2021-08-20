@@ -31,18 +31,18 @@ extern "C" DWORD UPFileParser_GetLastError(int* pInt_SysError)
 /************************************************************************/
 /*                文件解析器导出函数                                    */
 /************************************************************************/
-extern "C" BOOL FileParser_ReadVer_GetUPVersion(LPCTSTR lpszWebHost, TCHAR * ptszUPMsg, int* pInt_Len)
+extern "C" BOOL FileParser_ReadVer_GetRemote(LPCTSTR lpszJsonMsg, int nMsgLen, FILEPARSER_VERSIONINFO * **pppSt_FileList, int* pInt_Count, __int64x * pInt_Version, string * pStrDes)
 {
-	return m_FileRead.FileParser_ReadVer_GetUPVersion(lpszWebHost, ptszUPMsg, pInt_Len);
+	return m_FileRead.FileParser_ReadVer_GetRemote(lpszJsonMsg, nMsgLen, pppSt_FileList, pInt_Count, pInt_Version, pStrDes);
 }
-extern "C" BOOL FileParser_ReadVer_GetDescription(LPCTSTR lpszJsonMsg, int nMsgLen, TCHAR * ptszUPDes, int* pInt_Len)
+extern "C" BOOL FileParser_ReadVer_GetLocal(LPCTSTR lpszFileList, FILEPARSER_VERSIONINFO * **pppSt_FileList, int* pInt_Count, __int64x * pInt_Version)
 {
-	return m_FileRead.FileParser_ReadVer_GetDescription(lpszJsonMsg, nMsgLen, ptszUPDes, pInt_Len);
+	return m_FileRead.FileParser_ReadVer_GetLocal(lpszFileList, pppSt_FileList, pInt_Count, pInt_Version);
 }
 /************************************************************************/
 /*                文件匹配器导出函数                                    */
 /************************************************************************/
-extern "C" BOOL FileParser_Match_Start(LPCTSTR lpszFileName, LPCTSTR lpszJsonMsg, int nMsgLen, FILEPARSER_VERSIONINFO * **pppSt_ListUPDataVer, int* pInt_ListCount, __int64x* pInt_LocalVer, __int64x* pInt_NewVer)
+extern "C" BOOL FileParser_Match_Start(FILEPARSER_VERSIONINFO * **pppSt_ListRemote, int nRemoteCount, FILEPARSER_VERSIONINFO * **pppSt_ListLocal, int nLocalCount, list<FILEPARSER_VERSIONINFO>*pStl_ListUPDate)
 {
-	return m_FileMatch.FileParser_Match_Start(lpszFileName, lpszJsonMsg, nMsgLen, pppSt_ListUPDataVer, pInt_ListCount, pInt_LocalVer, pInt_NewVer);
+	return m_FileMatch.FileParser_Match_Start(pppSt_ListRemote, nRemoteCount, pppSt_ListLocal, nLocalCount, pStl_ListUPDate);
 }
