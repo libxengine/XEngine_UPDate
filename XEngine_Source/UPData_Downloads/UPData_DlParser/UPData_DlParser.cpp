@@ -257,7 +257,7 @@ XHTHREAD CUPData_DlParser::UPData_DlParser_ThreadDown(LPVOID lParam)
 			pClass_This->stl_MapVersion.insert(make_pair(xhDown, st_FileList));
             stl_ListIterator++;
 		}
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     return 0;

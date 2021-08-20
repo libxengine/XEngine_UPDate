@@ -43,13 +43,6 @@ int main(int argc, char** argv)
 	list<FILEPARSER_VERSIONINFO> stl_ListUPDate;
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
-	ptszJsonMsg = (TCHAR*)malloc(nUPLen);
-	if (NULL == ptszJsonMsg)
-	{
-		printf("申请内存失败，无法继续！\n");
-		return 0;
-	}
-	memset(ptszJsonMsg, '\0', nUPLen);
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
 	memset(&st_ServiceConfig, '\0', sizeof(XENGINE_SERVERCONFIG));
 
@@ -164,14 +157,35 @@ int main(int argc, char** argv)
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("开始安装更新文件..."));
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("开始安装更新..."));
 	UPData_DlParser_Close();
-	if (!HelpModule_Api_Install(st_ServiceConfig.tszLocalList, ptszJsonMsg, nUPLen, &stl_ListUPDate, st_ServiceConfig.tszDownPath))
+	if (!HelpModule_Api_Copy(&stl_ListUPDate, st_ServiceConfig.tszDownPath, FALSE))
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("更新失败,安装文件失败,错误:%lX"), UPHelpModule_GetLastError());
 		goto NETSERVICE_APPEXIT;
 	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("更新成功,退出更新服务!"));
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("更新中,安装文件成功!"));
+
+	if (!HelpModule_Api_SetVersion(st_ServiceConfig.tszLocalList, ptszJsonMsg, nUPLen))
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("更新失败,设置版本信息失败,错误:%lX"), UPHelpModule_GetLastError());
+		goto NETSERVICE_APPEXIT;
+	}
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("更新中,设置文件版本信息成功!"));
+
+	if (!HelpModule_Api_RunExec(&stl_ListUPDate))
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("更新失败,运行程序失败,错误:%lX"), UPHelpModule_GetLastError());
+		goto NETSERVICE_APPEXIT;
+	}
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("更新中,运行执行程序成功!"));
+
+	if (!HelpModule_Api_Clear(ptszJsonMsg, nUPLen))
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("更新失败,清理文件失败,错误:%lX"), UPHelpModule_GetLastError());
+		goto NETSERVICE_APPEXIT;
+	}
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("更新中,清理文件成功,所有更新已经完毕!"));
 
 	BaseLib_OperatorMemory_Free((XPPPMEM)&ppSt_ListLocal, nListLocal);
 	BaseLib_OperatorMemory_Free((XPPPMEM)&ppSt_ListRemote, nListRemote);

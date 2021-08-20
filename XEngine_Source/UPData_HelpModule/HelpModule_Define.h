@@ -18,41 +18,86 @@ extern "C" DWORD UPHelpModule_GetLastError(int *pInt_SysError = NULL);
 /*                           帮助函数导出                               */
 /************************************************************************/
 /********************************************************************
-函数名称：HelpModule_Api_Install
-函数功能：安装更新包
- 参数.一：lpszLocalFile
+函数名称：HelpModule_Api_Copy
+函数功能：拷贝新文件到指定目录
+ 参数.一：pStl_ListUPDate
+  In/Out：In
+  类型：容器指针
+  可空：N
+  意思：更新的文件列表信息
+ 参数.二：lpszDlPath
+  In/Out：In
+  类型：常量字符指针
+  可空：Y
+  意思：下载的路径
+ 参数.三：bDelFile
+  In/Out：In
+  类型：逻辑型
+  可空：Y
+  意思：是否删除原始文件
+返回值
+  类型：逻辑型
+  意思：是否拷贝成功
+备注：
+*********************************************************************/
+extern "C" BOOL HelpModule_Api_Copy(list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate, LPCTSTR lpszDlPath = NULL, BOOL bDelFile = TRUE);
+/********************************************************************
+函数名称：HelpModule_Api_SetVersion
+函数功能：设置文件版本
+ 参数.一：lpszLocalListFile
   In/Out：In
   类型：常量字符指针
   可空：N
-  意思：本地文件列表路径
- 参数.二：lpszRemoteJson
+  意思：本地文件列表名称
+ 参数.二：lpszMsgBuffer
   In/Out：In
   类型：常量字符指针
   可空：N
-  意思：远程获取到的JSON更新列表
+  意思：更新文件列表的信息结构
  参数.三：nMsgLen
   In/Out：In
   类型：整数型
   可空：N
-  意思：输入JSON缓冲区大小
- 参数.四：pStl_ListUPDate
+  意思：缓冲区大小
+返回值
+  类型：逻辑型
+  意思：是否设置成功
+备注：
+*********************************************************************/
+extern "C" BOOL HelpModule_Api_SetVersion(LPCTSTR lpszLocalFile, LPCTSTR lpszMsgBuffer, int nMsgLen);
+/********************************************************************
+函数名称：HelpModule_Api_RunExec
+函数功能：运行一个程序
+ 参数.一：pStl_ListUPDate
   In/Out：In
   类型：容器指针
   可空：N
-  意思：解析好的更新的文件列表,这个内存由调用者维护
- 参数.五：lpszDlPath
-  In/Out：In
-  类型：常量字符指针
-  可空：Y
-  意思：下载到的目录，如果为NULL，表明当前目录
+  意思：文件更新运行列表
 返回值
   类型：逻辑型
-  意思：是否安装成功
-备注：此函数会先把要更新的文件拷贝到指定位置并且删除下载好的临时文件,然后设置本地文件列表
-      的信息为最新版本信息,然后执行你需要执行的文件和删除你需要删除的文件.部分操作可能需要权限才能执行
-      比如:你需要安装到C盘的文件的你需要提供权限才能成功执行此函数
+  意思：是否执行成功
+备注：
 *********************************************************************/
-extern "C" BOOL HelpModule_Api_Install(LPCSTR lpszLocalFile, LPCSTR lpszRemoteJson, int nMsgLen, list<FILEPARSER_VERSIONINFO>*pStl_ListUPDate, LPCSTR lpszDlPath = NULL);
+extern "C" BOOL HelpModule_Api_RunExec(list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate);
+/********************************************************************
+函数名称：HelpModule_Api_Clear
+函数功能：清理工作执行
+ 参数.一：lpszRemoteJson
+  In/Out：In
+  类型：常量字符指针
+  可空：N
+  意思：清理列表
+ 参数.二：nMsgLen
+  In/Out：In
+  类型：整数型
+  可空：N
+  意思：输入缓冲区大小
+返回值
+  类型：逻辑型
+  意思：是否成功
+备注：
+*********************************************************************/
+extern "C" BOOL HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen);
 /********************************************************************
 函数名称：HelpModule_Api_BuildVer
 函数功能：构建应用更新文件

@@ -3,5 +3,8 @@ LIBRARY
 EXPORTS 
 	UPHelpModule_GetLastError
 
-	HelpModule_Api_Install
+	HelpModule_Api_Copy
+	HelpModule_Api_SetVersion
+	HelpModule_Api_RunExec
+	HelpModule_Api_Clear
 	HelpModule_Api_BuildVer
