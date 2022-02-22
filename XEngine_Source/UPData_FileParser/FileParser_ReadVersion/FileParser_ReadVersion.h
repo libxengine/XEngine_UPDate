@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 /********************************************************************
 //	Created:	2014/7/17  16:41
 //	File Name: 	F:\NetEngine_Windows\NetEngine_SourceCode\NetEngine_UPData\UPData_FileParser\FileParser_ReadVersion\FileParser_ReadVersion.h

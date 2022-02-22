@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "FileParser_ReadVersion.h"
 /********************************************************************
 //	Created:	2014/7/17  16:43

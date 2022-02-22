@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 /********************************************************************
 //	Created:	2014/7/25  17:54
 //	File Name: 	F:\NetEngine_Windows\NetEngine_SourceCode\NetEngine_UPData\UPData_HelpModule\HelpModule_Api\HelpModule_Api.h

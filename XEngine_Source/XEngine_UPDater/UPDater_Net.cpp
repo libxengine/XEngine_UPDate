@@ -1,13 +1,13 @@
-#include "UPDater_Hdr.h"
+О╩©#include "UPDater_Hdr.h"
 
-LPCTSTR lpszDlStatus[] = { "н╢ж╙", "обтьжп", "тщмё", "мёж╧", "мЙЁи", "╢МнС" };
+LPCTSTR lpszDlStatus[] = { "Ф°╙Г÷╔", "Д╦▀Х╫╫Д╦╜", "Ф ┌Е│°", "Е│°Ф╜╒", "Е╝▄Ф┬░", "И■≥Х╞╞" };
 void __stdcall UPDater_Callback_Download(LPCTSTR lpszFileName, double nDownSize, double nFileSize, int nRate, int nAllRate, ENUM_DOWNENGINE_STATUS enDlStatus, LPVOID lParam)
 {
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("обть╣днд╪Ч:%s,обть╢Сп║:%lf,нд╪Ч╢Сп║:%lf,╫Ь╤х:%d,вэ╫Ь╤х:%d,в╢л╛:%s"), lpszFileName, nDownSize, nFileSize, nRate, nAllRate, lpszDlStatus[enDlStatus]);
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("Д╦▀Х╫╫Г └Ф√┤Д╩╤:%s,Д╦▀Х╫╫Е╓╖Е╟▐:%lf,Ф√┤Д╩╤Е╓╖Е╟▐:%lf,Х©⌡Е╨╕:%d,Ф─╩Х©⌡Е╨╕:%d,Г┼╤Ф─│:%s"), lpszFileName, nDownSize, nFileSize, nRate, nAllRate, lpszDlStatus[enDlStatus]);
 
 	if (100 == nAllRate)
 	{
 		bIsRun = FALSE;
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("нд╪ЧобтьмЙЁи"));
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("Ф√┤Д╩╤Д╦▀Х╫╫Е╝▄Ф┬░"));
 	}
 }

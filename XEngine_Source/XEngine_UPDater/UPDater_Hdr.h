@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #ifdef _WINDOWS
 #include <Windows.h>
 #include <tchar.h>
@@ -38,9 +38,9 @@ using namespace std;
 //    File Path:   D:\XEngine_UPDate\XEngine_Source\XEngine_UPDater
 //    File Base:   UPDater_Hdr
 //    File Ext:    h
-//    Project:     XEngine(ÍøÂçÍ¨ÐÅÒýÇæ)
+//    Project:     XEngine(ç½‘ç»œé€šä¿¡å¼•æ“Ž)
 //    Author:      qyt
-//    Purpose:     ¹«ÓÃÍ·ÎÄ¼þ
+//    Purpose:     å…¬ç”¨å¤´æ–‡ä»¶
 //    History:
 *********************************************************************/
 extern BOOL bIsRun;
