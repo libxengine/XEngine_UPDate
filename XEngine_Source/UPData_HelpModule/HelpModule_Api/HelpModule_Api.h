@@ -27,7 +27,7 @@ public:
 	BOOL HelpModule_Api_SetVersion(LPCTSTR lpszLocalFile, LPCTSTR lpszMsgBuffer, int nMsgLen);
 	BOOL HelpModule_Api_RunExec(list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate);
 	BOOL HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen);
-    BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, __int64x nFileVer = 0, BOOL bSubDir = TRUE, LPCTSTR lpszUPFile = NULL, LPCTSTR lpszDlUrl = NULL,LPCTSTR lpszCfgPath = NULL);
+    BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, LPCTSTR lpszUPFile, LPCTSTR lpszDlUrl, LPCTSTR lpszCustomDir = NULL, BOOL bSubDir = TRUE);
 protected:
 private:
 };
