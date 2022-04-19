@@ -14,7 +14,7 @@ void Signale_Handler(int sig)
 		UPData_DlParser_Close();
 		HelpComponents_XLog_Destroy(xhLog);
 	}
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	WSACleanup();
 #endif
 	exit(0);
@@ -22,7 +22,7 @@ void Signale_Handler(int sig)
 
 int main(int argc, char** argv)
 {
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	WSADATA st_WSAData;
 	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
 #endif
@@ -206,7 +206,7 @@ NETSERVICE_APPEXIT:
 		HelpComponents_XLog_Destroy(xhLog);
 		getchar();
 	}
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	WSACleanup();
 #endif
 	return 0;

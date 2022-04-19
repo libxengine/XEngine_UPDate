@@ -1,5 +1,5 @@
 ﻿#pragma once
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 #include <Windows.h>
 #include <tchar.h>
 #endif
