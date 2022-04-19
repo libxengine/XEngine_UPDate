@@ -29,8 +29,5 @@ public:
 	BOOL HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen);
     BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, __int64x nFileVer = 0, BOOL bSubDir = TRUE, LPCTSTR lpszUPFile = NULL, LPCTSTR lpszDlUrl = NULL,LPCTSTR lpszCfgPath = NULL);
 protected:
-
-protected:
-    static BOOL CALLBACK HelpModule_Api_EnumFile(LPCSTR lpFileOrPath, BOOL bFindPath, LPVOID lParam);
 private:
 };

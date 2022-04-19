@@ -451,14 +451,31 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_HELPMODULE_API_BUILDVER_PARAMENT;
         return FALSE;
     }
+    int nListCount;
+    CHAR** ppszListDir;
     list<HELPMODULE_FILELIST> stl_ListFile;
     //枚举文件
-    if (!SystemApi_File_EnumFile(lpszPath, NULL, NULL,HelpModule_Api_EnumFile, &stl_ListFile, bSubDir, 1))
+    if (!SystemApi_File_EnumFile(lpszPath, &ppszListDir, &nListCount, NULL, NULL, bSubDir, 1))
     {
         HelpModule_IsErrorOccur = FALSE;
         HelpModule_dwErrorCode = SystemApi_GetLastError();
         return FALSE;
     }
+    for (int i = 0; i < nListCount; i++)
+    {
+		HELPMODULE_FILELIST st_FileList;
+		memset(&st_FileList, '\0', sizeof(HELPMODULE_FILELIST));
+
+		if (!BaseLib_OperatorString_GetFileAndPath(ppszListDir[i], st_FileList.tszFilePath, st_FileList.tszFileName))
+		{
+			HelpModule_IsErrorOccur = TRUE;
+			HelpModule_dwErrorCode = BaseLib_GetLastError();
+			return FALSE;
+		}
+        stl_ListFile.push_back(st_FileList);
+    }
+    BaseLib_OperatorMemory_Free((XPPPMEM)&ppszListDir, nListCount);
+
     Json::Value st_JsonLocalRoot;
     Json::Value st_JsonLocalArray;
     Json::Value st_JsonLocalObject;
@@ -502,12 +519,12 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
     }
     //开始构架JSON文件列表
     list<HELPMODULE_FILELIST>::const_iterator stl_ListIterator = stl_ListFile.begin();
-    for (unsigned int i = 1;stl_ListIterator != stl_ListFile.end();stl_ListIterator++,i++)
+    for (unsigned int i = 1; stl_ListIterator != stl_ListFile.end(); stl_ListIterator++, i++)
     {
         TCHAR tszFileCode[64];
-        memset(tszFileCode,'\0',sizeof(tszFileCode));
+        memset(tszFileCode, '\0', sizeof(tszFileCode));
 
-        _stprintf_s(tszFileCode,_T("XYRYUPVERCODE%d"),i);
+        _stprintf_s(tszFileCode, _T("XYRYUPVERCODE%d"), i);
 
         st_JsonLocalObject["ModuleVersion"] = (Json::Int64)m_nFileVer;
         st_JsonLocalObject["ModuleCode"] = tszFileCode;
@@ -583,28 +600,6 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
             HelpModule_dwErrorCode = SystemApi_GetLastError();
             return FALSE;
         }
-    }
-    return TRUE;
-}
-//////////////////////////////////////////////////////////////////////////
-//                      回调函数
-//////////////////////////////////////////////////////////////////////////
-BOOL CALLBACK CHelpModule_Api::HelpModule_Api_EnumFile(LPCSTR lpFileOrPath, BOOL bFindPath, LPVOID lParam)
-{
-    list<HELPMODULE_FILELIST> *pStl_ListFile = (list<HELPMODULE_FILELIST> *)lParam;
-    if (!bFindPath)
-    {
-        HELPMODULE_FILELIST st_FileList;
-        memset(&st_FileList, '\0', sizeof(HELPMODULE_FILELIST));
-
-        if (!BaseLib_OperatorString_GetFileAndPath(lpFileOrPath, st_FileList.tszFilePath, st_FileList.tszFileName))
-        {
-            HelpModule_IsErrorOccur = TRUE;
-            HelpModule_dwErrorCode = BaseLib_GetLastError();
-            return FALSE;
-        }
-
-        pStl_ListFile->push_back(st_FileList);
     }
     return TRUE;
 }
