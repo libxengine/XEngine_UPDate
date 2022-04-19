@@ -12,20 +12,15 @@
 #include "framework.h"
 #include <tchar.h>
 #include <WinSock2.h>
-#include <json/json.h>
 #else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#ifdef _CENTOS
-#include <json/json.h>
-#else
-#include <jsoncpp/json/json.h>
-#endif
 #endif
 #endif //PCH_H
 #include <list>
+#include <json/json.h>
 using namespace std;
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>
@@ -47,16 +42,19 @@ using namespace std;
 extern BOOL FileParser_IsErrorOccur;
 extern DWORD FileParser_dwErrorCode;
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
+#pragma comment(lib,"XEngine_BaseLib/XEngine_BaseLib.lib")
 #ifdef _DEBUG
-#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
-#else
 #ifdef _WIN64
-#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
+#pragma comment(lib,"../x64/Debug/jsoncpp")
 #else
-#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
-#endif // _WIN64
+#pragma comment(lib,"../Debug/jsoncpp")
 #endif
 #else
-
+#ifdef _WIN64
+#pragma comment(lib,"../x64/Release/jsoncpp")
+#else
+#pragma comment(lib,"../Release/jsoncpp")
+#endif
+#endif
 #endif

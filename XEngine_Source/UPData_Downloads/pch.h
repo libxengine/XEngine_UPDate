@@ -49,22 +49,20 @@ extern BOOL UPData_IsErrorOccur;
 extern DWORD UPData_dwErrorCode;
 
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
+#pragma comment(lib,"XEngine_BaseLib/XEngine_BaseLib.lib")
+#pragma comment(lib,"XEngine_DownLoad/XEngine_DownLoad.lib")
 #ifdef _DEBUG
-#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x86/XEngine_DownLoad/XEngine_DownLoad.lib")
-#pragma comment(lib,"../Debug/UPData_FileParser.lib")
-#else
 #ifdef _WIN64
-#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x64/XEngine_DownLoad/XEngine_DownLoad.lib")
-#pragma comment(lib,"../x64/Release/UPData_FileParser.lib")
+#pragma comment(lib,"../x64/Debug/UPData_FileParser.lib")
 #else
-#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x86/XEngine_DownLoad/XEngine_DownLoad.lib")
-#pragma comment(lib,"../Release/UPData_FileParser.lib")
-#endif // _WIN64
+#pragma comment(lib,"../Debug/UPData_FileParser.lib")
 #endif
 #else
-
+#ifdef _WIN64
+#pragma comment(lib,"../x64/Release/UPData_FileParser.lib")
+#else
+#pragma comment(lib,"../Release/UPData_FileParser.lib")
+#endif
+#endif
 #endif

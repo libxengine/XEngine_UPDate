@@ -37,10 +37,6 @@
 extern BOOL Config_IsErrorOccur;
 extern DWORD Config_dwErrorCode;
 
-#ifdef _WINDOWS
-#ifdef _WIN64
-#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib")
-#else
-#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib")
-#endif
+#ifdef _MSC_BUILD
+#pragma comment(lib,"XEngine_BaseLib/XEngine_BaseLib")
 #endif
