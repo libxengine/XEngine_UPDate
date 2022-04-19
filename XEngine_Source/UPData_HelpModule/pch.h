@@ -10,23 +10,18 @@
 #ifdef _MSC_BUILD
 // 添加要在此处预编译的标头
 #include "framework.h"
+#include <tchar.h>
+#else
 #include <stdio.h>
 #include <stdlib.h>
-#include <tchar.h>
-#include <json/json.h>
-#else
+#endif
+#endif //PCH_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#ifdef _CENTOS
-#include <json/json.h>
-#else
-#include <jsoncpp/json/json.h>
-#endif
-#endif
-#endif //PCH_H
 #include <list>
+#include <json/json.h>
 using namespace std;
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>

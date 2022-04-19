@@ -1,12 +1,12 @@
 CC = g++ -Wall -std=c++17 -fPIC
 RELEASE = 0
 UNICODE = 0
-INCLUDE = -I ./
+INCLUDE = -I ./ -I ../XEngine_ThirdPart/jsoncpp
 FILECENTOS = /etc/redhat-release
-LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L ../XEngine_ThirdPart/jsoncpp
 LIB = -lXEngine_BaseLib -ljsoncpp
 LIBEX = -static-libgcc -lrt -ldl 
-LOADSO = -Wl,-rpath=
+LOADSO = -Wl,-rpath=./,--disable-new-dtags
 LIBINCLUDE = FileParser_Match.o FileParser_ReadVersion.o pch.o
 
 ifeq ($(RELEASE),1)
@@ -39,7 +39,7 @@ FileParser_ReadVersion.o:./FileParser_ReadVersion/FileParser_ReadVersion.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./FileParser_ReadVersion/FileParser_ReadVersion.cpp
 
 pch.o:pch.cpp
-	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) pch.cpp
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) pch.cpp
 
 InstallAll:InstallSo 
 InstallSo:./libUPData_FileParser.so

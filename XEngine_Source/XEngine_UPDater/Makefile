@@ -2,8 +2,12 @@ CC = g++ -std=c++17 -Wall
 RELEASE = 0
 UNICODE = 0  
 FILECENTOS = /etc/redhat-release
-LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_HelpComponents -L /usr/local/lib/XEngine_Release/XEngine_NetHelp -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk -L ../UPData_Downloads -L ../UPData_FileParser -L ../UPData_HelpModule -L ../UPData_Configure
-LIB = -lXEngine_BaseLib -lHelpComponents_XLog -lNetHelp_APIHelp -lXEngine_SystemApi -lUPData_FileParser -lUPData_Downloads -lUPData_HelpModule -lUPData_Configure
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_HelpComponents -L /usr/local/lib/XEngine_Release/XEngine_NetHelp -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk \
+          -L ../UPData_Downloads -L ../UPData_FileParser -L ../UPData_HelpModule -L ../UPData_Configure \
+		  -L ../XEngine_ThirdPart/jsoncpp
+LIB = -lXEngine_BaseLib -lHelpComponents_XLog -lNetHelp_APIHelp -lXEngine_SystemApi \
+      -lUPData_FileParser -lUPData_Downloads -lUPData_HelpModule -lUPData_Configure \
+	  -ljsoncpp
 LIBEX = -static-libgcc -ldl -lrt -lpthread
 LOADSO = -Wl,-rpath=./,--disable-new-dtags
 LIBINCLUDE = UPDater_Net.o UPDater_Config.o XEngine_UPDater.o
