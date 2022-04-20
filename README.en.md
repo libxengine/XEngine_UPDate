@@ -1,9 +1,9 @@
-[中文](README.md) ||  [English](README.en.md)  
-# XEngine_MQService
+[涓枃](README.md) ||  [English](README.en.md)  
+# XEngine_UPDate
 This repository has a development and master branch. If you want to use it, please use the master branch  
 
 #### Description
-c c++ 软件更新服务  
+c c++ 杞欢鏇存柊鏈嶅姟  
 c c++ Software update service  
 
 #### Software Architecture
@@ -23,34 +23,20 @@ this software support following features
 
 #### Requirements  
 support system above windows 7sp1 and linux(ubuntu20.04,centos8)  
-XEngine need V7.19 or above  
-vcpkg need 2021.05.11 or above  
+XEngine need V7.32 or above   
+
+#### XEngine
+install XEngine can be refer to xengine Readme docment  
+GITEE:https://gitee.com/xyry/libxengine  
+GITHUB:https://github.com/libxengine/xengine  
 
 #### Windows
-use vs2019 x86(debug or release) x64(only release) open and complie  
+use vs open and complie  
 You need to configure the environment in the following way, otherwise you may need to set the library directory in the project yourself  
-
-##### install Dependent library
-vcpkg:https://github.com/microsoft/vcpkg   
-vcpkg.exe install jsoncpp  
-vcpkg integrate install  
-you can not use vcpkg and config jsoncpp development for youself   
-
-##### XEngine
-XEngine can be download with mine repository,whe you downloaded xengine,you have to add value to you user environment  
-- XEngine_Include header file path
-- XEngine_Library library file path
 
 #### Linux
 Linux use Makefile to complie  
-supproted ubuntu x64 or centos x64     
-
-##### install Dependent library
-install jsoncpp to your system  
-ubuntu20.04  
-sudo apt install libjsoncpp-devel  
-Centos8.x  
-sudo dnf install jsoncpp-devel  
+supproted ubuntu x64 or centos x64   
 
 ##### XEngine Install
 you can install xengine env to your system by shell   
@@ -73,6 +59,7 @@ make FLAGS=CleanAll clear
 ## directory struct
 - XEngine_Release  install directory  
 - XEngine_Source   code    directory  
+- XEngine_Docment  docment directory
 
 ## Participate in contribution
 Since what we provide is a console method of checking and downloading updates, it may not meet your software needs too much  
