@@ -32,6 +32,11 @@ BOOL UPDater_Parament(int argc, char **argv)
 			memset(st_ServiceConfig.st_Maker.tszMakePath, '\0', sizeof(st_ServiceConfig.st_Maker.tszMakePath));
 			_tcscpy_s(st_ServiceConfig.st_Maker.tszMakePath, MAX_PATH, argv[i + 1]);
 		}
+		else if (0 == _tcscmp("-f", argv[i]))
+		{
+			memset(st_ServiceConfig.tszLocalList, '\0', sizeof(st_ServiceConfig.tszLocalList));
+			_tcscpy_s(st_ServiceConfig.tszLocalList, MAX_PATH, argv[i + 1]);
+		}
 		else if (0 == _tcscmp("-l", argv[i]))
 		{
 			st_ServiceConfig.st_XLog.nLogLeave = _ttoi(argv[i + 1]);
@@ -52,7 +57,8 @@ void UPDater_ParamentHelp()
 	printf(_T("-h or -H：启动参数帮助提示信息\n"));
 	printf(_T("-v or -V：查看系统版本\n"));
 	printf(_T("-p：设置更新文件下载的目录,默认:./UPFile/\n"));
-	printf(_T("-m：构建本地版本更新列表，需要参数设置要构建软件版本的目录,目录默认需要添加/符号.\n"));
+	printf(_T("-m：构建本地版本更新列表，需要参数设置要构建软件版本的目录.\n"));
+	printf(_T("-f：指定本地文件列表路径,此参数可以用于生成和更新.\n"));
 	printf(_T("-l：设置本地日志记录信息级别\n"));
 	printf(_T("-d：设置有新版本是否下载文件,默认0不下载,1位下载\n"));
 	printf(_T("--------------------------启动参数帮助结束--------------------------\n"));

@@ -71,7 +71,6 @@ int main(int argc, char** argv)
 
 	if (st_ServiceConfig.bIsMake)
 	{
-		getchar();
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("开始构建版本列表"));
 		if (!HelpModule_Api_BuildVer(st_ServiceConfig.st_Maker.tszMakePath, st_ServiceConfig.tszLocalList, st_ServiceConfig.st_Maker.tszUPFile, st_ServiceConfig.st_Maker.tszUPUrl))
 		{
