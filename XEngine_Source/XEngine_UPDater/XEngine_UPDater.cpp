@@ -14,7 +14,7 @@ void Signale_Handler(int sig)
 		UPData_DlParser_Close();
 		HelpComponents_XLog_Destroy(xhLog);
 	}
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	WSACleanup();
 #endif
 	exit(0);
@@ -22,11 +22,11 @@ void Signale_Handler(int sig)
 
 int main(int argc, char** argv)
 {
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	WSADATA st_WSAData;
 	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
 #endif
-#if (XENGINE_VERSION_KERNEL < 7) && (XENGINE_VERSION_MAIN < 19)
+#if (XENGINE_VERSION_KERNEL < 7) && (XENGINE_VERSION_MAIN < 31)
 	printf("XEngine版本过低,无法继续\n");
 #endif
 	bIsRun = TRUE;
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 	if (st_ServiceConfig.bIsMake)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("开始构建版本列表"));
-		if (!HelpModule_Api_BuildVer(st_ServiceConfig.st_Maker.tszMakePath, st_ServiceConfig.tszLocalList, 0, TRUE, st_ServiceConfig.st_Maker.tszUPFile, st_ServiceConfig.st_Maker.tszUPUrl))
+		if (!HelpModule_Api_BuildVer(st_ServiceConfig.st_Maker.tszMakePath, st_ServiceConfig.tszLocalList, st_ServiceConfig.st_Maker.tszUPFile, st_ServiceConfig.st_Maker.tszUPUrl))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("构建标准版本列表失败！错误：%lX"), UPHelpModule_GetLastError());
 			goto NETSERVICE_APPEXIT;
@@ -206,7 +206,7 @@ NETSERVICE_APPEXIT:
 		HelpComponents_XLog_Destroy(xhLog);
 		getchar();
 	}
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	WSACleanup();
 #endif
 	return 0;

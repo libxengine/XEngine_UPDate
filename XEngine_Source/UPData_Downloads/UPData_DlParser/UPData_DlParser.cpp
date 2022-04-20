@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "UPData_DlParser.h"
 /********************************************************************
 //	Created:	2014/7/20  14:28
@@ -18,8 +18,8 @@ CUPData_DlParser::CUPData_DlParser()
     m_nDlNumber = 0;
     m_nDlNow = 0;
 
-    stl_ListVersion.clear();
-    stl_MapVersion.clear();
+    pSTDThread_Down = NULL;
+    pSTDThread_Event = NULL;
 
     memset(tszDlPath,'\0',sizeof(tszDlPath));
 }
@@ -138,14 +138,20 @@ BOOL CUPData_DlParser::UPData_DlParser_Close()
 
     m_bRun = FALSE;
     //结束事件线程
-    if (pSTDThread_Event->joinable())
+    if (NULL != pSTDThread_Event)
     {
-        pSTDThread_Event->join();
+		if (pSTDThread_Event->joinable())
+		{
+			pSTDThread_Event->join();
+		}
     }
-    //结束下载线程
-    if (pSTDThread_Down->joinable())
+    if (NULL != pSTDThread_Down)
     {
-        pSTDThread_Down->join();
+		//结束下载线程
+		if (pSTDThread_Down->joinable())
+		{
+			pSTDThread_Down->join();
+		}
     }
     //判断是否是全部同时下载，如果是，需要关闭句柄指针
     unordered_map<XNETHANDLE, FILEVERSION_LIST>::const_iterator stl_MapIterator = stl_MapVersion.begin();

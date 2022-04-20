@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 /********************************************************************
 //	Created:	2014/7/25  17:54
 //	File Name: 	F:\NetEngine_Windows\NetEngine_SourceCode\NetEngine_UPData\UPData_HelpModule\HelpModule_Api\HelpModule_Api.h
@@ -27,10 +27,7 @@ public:
 	BOOL HelpModule_Api_SetVersion(LPCTSTR lpszLocalFile, LPCTSTR lpszMsgBuffer, int nMsgLen);
 	BOOL HelpModule_Api_RunExec(list<FILEPARSER_VERSIONINFO>* pStl_ListUPDate);
 	BOOL HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen);
-    BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, __int64x nFileVer = 0, BOOL bSubDir = TRUE, LPCTSTR lpszUPFile = NULL, LPCTSTR lpszDlUrl = NULL,LPCTSTR lpszCfgPath = NULL);
+    BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, LPCTSTR lpszUPFile, LPCTSTR lpszDlUrl, LPCTSTR lpszCustomDir = NULL, BOOL bSubDir = TRUE);
 protected:
-
-protected:
-    static BOOL CALLBACK HelpModule_Api_EnumFile(LPCSTR lpFileOrPath, BOOL bFindPath, LPVOID lParam);
 private:
 };

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "HelpModule_Api.h"
 /********************************************************************
 //	Created:	2014/7/25  17:55
@@ -409,56 +409,67 @@ BOOL CHelpModule_Api::HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen)
   In/Out：In
   类型：常量字符指针
   可空：N
-  意思：构建好的更新数据结构保存到哪个地方
- 参数.三：nFileVer
+  意思：构建的本地文件列表信息.用于与远端比较
+ 参数.三：lpszUPFile
   In/Out：In
-  类型：整数型
+  类型：常量字符指针
+  可空：N
+  意思：服务器的文件名称地址,这个文件需要上传的服务器用来更新
+ 参数.四：lpszDlUrl
+  In/Out：In
+  类型：常量字符指针
   可空：Y
-  意思：构建的当前版本号，如果为0，那么会采用当前年月日为版本
- 参数.四：bSubDir
+  意思：更新地址,用 http://www.xxx.com/UPFile/ 表示，我们会自动填充后面的文件名和路径
+ 参数.五：lpszCustomDir
+  In/Out：In
+  类型：常量字符指针
+  可空：Y
+  意思：自定义本地路径主地址
+ 参数.六：bSubDir
   In/Out：In
   类型：逻辑型
   可空：Y
   意思：是否包含子目录，是否把子目录下的所有文件都构建成更新包
- 参数.五：lpszUPFile
-  In/Out：In
-  类型：常量字符指针
-  可空：Y
-  意思：构建要更新的数据结构列表，可以不使用，自己编写更新的JSON
- 参数.六：lpszDlUrl
-  In/Out：In
-  类型：常量字符指针
-  可空：Y
-  意思：第五个参数有值，这个参数必须有值，这个将设置更新的下载地址，使用
-           http://www.xxx.com/UPFile/ 表示，我们会自动填充后面的文件名和路径
- 参数.七：lpszCfgPath
-  In/Out：In
-  类型：常量字符指针
-  可空：Y
-  意思：如果不为NULL,指定所有模块配置文件目录
 返回值
   类型：逻辑型
   意思：是否构建成功
 备注：次函数可以帮助你快速构建一个可更新的文件列表，方便你快速使用我们的更新SDK
 *********************************************************************/
-BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocalFile, __int64x nFileVer /* = 0 */,BOOL bSubDir /* = TRUE */, LPCTSTR lpszUPFile /* = NULL */, LPCTSTR lpszDlUrl /* = NULL */,LPCTSTR lpszCfgPath /* = NULL*/)
+BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, LPCTSTR lpszUPFile, LPCTSTR lpszDlUrl, LPCTSTR lpszCustomDir /* = NULL */, BOOL bSubDir /* = TRUE */)
 {
     HelpModule_IsErrorOccur = FALSE;
 
-    if ((NULL == lpszPath) || (NULL == lpszLocalFile))
+    if ((NULL == lpszPath) || (NULL == lpszLocalFile) || (NULL == lpszUPFile) || (NULL == lpszDlUrl))
     {
         HelpModule_IsErrorOccur = TRUE;
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_HELPMODULE_API_BUILDVER_PARAMENT;
         return FALSE;
     }
+    int nListCount;
+    CHAR** ppszListDir;
     list<HELPMODULE_FILELIST> stl_ListFile;
     //枚举文件
-    if (!SystemApi_File_EnumFile(lpszPath, NULL, NULL,HelpModule_Api_EnumFile, &stl_ListFile, bSubDir, 1))
+    if (!SystemApi_File_EnumFile(lpszPath, &ppszListDir, &nListCount, NULL, NULL, bSubDir, 1))
     {
         HelpModule_IsErrorOccur = FALSE;
         HelpModule_dwErrorCode = SystemApi_GetLastError();
         return FALSE;
     }
+    for (int i = 0; i < nListCount; i++)
+    {
+		HELPMODULE_FILELIST st_FileList;
+		memset(&st_FileList, '\0', sizeof(HELPMODULE_FILELIST));
+
+		if (!BaseLib_OperatorString_GetFileAndPath(ppszListDir[i], st_FileList.tszFilePath, st_FileList.tszFileName))
+		{
+			HelpModule_IsErrorOccur = TRUE;
+			HelpModule_dwErrorCode = BaseLib_GetLastError();
+			return FALSE;
+		}
+        stl_ListFile.push_back(st_FileList);
+    }
+    BaseLib_OperatorMemory_Free((XPPPMEM)&ppszListDir, nListCount);
+
     Json::Value st_JsonLocalRoot;
     Json::Value st_JsonLocalArray;
     Json::Value st_JsonLocalObject;
@@ -469,56 +480,49 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
     Json::Value st_JsonRemoteOPtion;
     Json::StreamWriterBuilder st_JsonBuilder;
     //判断是否是自定义版本
-    __int64x m_nFileVer = 0;
-    if (0 == nFileVer)
-    {
-        TCHAR tszTimer[64];
-        XENGINE_LIBTIMER st_Timer;
+	TCHAR tszTimer[64];
+	XENGINE_LIBTIMER st_Timer;
 
-        memset(tszTimer,'\0',sizeof(tszTimer));
-        memset(&st_Timer,'\0',sizeof(XENGINE_LIBTIMER));
+	memset(tszTimer, '\0', sizeof(tszTimer));
+	memset(&st_Timer, '\0', sizeof(XENGINE_LIBTIMER));
 
-        if (!BaseLib_OperatorTime_GetSysTime(&st_Timer))
-        {
-            HelpModule_IsErrorOccur = FALSE;
-            HelpModule_dwErrorCode = BaseLib_GetLastError();
-            return FALSE;
-        }
-        _stprintf_s(tszTimer, _T("%04d%02d%02d%02d%02d%02d"), st_Timer.wYear, st_Timer.wMonth, st_Timer.wDay, st_Timer.wHour, st_Timer.wMinute, st_Timer.wSecond);
-        m_nFileVer = _ttoi64(tszTimer);
-    }
-    else
-    {
-        m_nFileVer = nFileVer;
-    }
-    st_JsonLocalRoot["MainVersion"] = (Json::Int64)m_nFileVer;
+	if (!BaseLib_OperatorTime_GetSysTime(&st_Timer))
+	{
+		HelpModule_IsErrorOccur = FALSE;
+		HelpModule_dwErrorCode = BaseLib_GetLastError();
+		return FALSE;
+	}
+	_stprintf_s(tszTimer, _T("%04d%02d%02d%02d%02d%02d"), st_Timer.wYear, st_Timer.wMonth, st_Timer.wDay, st_Timer.wHour, st_Timer.wMinute, st_Timer.wSecond);
+    __int64x m_nFileVer = _ttoi64(tszTimer);
+
+    st_JsonLocalRoot["MainVersion"] = (Json::UInt64)m_nFileVer;
     if (NULL != lpszUPFile)
     {
         st_JsonRemoteOPtion["st_JsonRemoteOPtion"] = 0;
 
-        st_JsonRemoteRoot["MainVersion"] = (Json::Int64)m_nFileVer;
+        st_JsonRemoteRoot["MainVersion"] = (Json::UInt64)m_nFileVer;
         st_JsonRemoteRoot["MainDescription"] = _T("File UPData Des!");
         st_JsonRemoteRoot["FileVerOPtion"] = st_JsonRemoteOPtion;
     }
     //开始构架JSON文件列表
     list<HELPMODULE_FILELIST>::const_iterator stl_ListIterator = stl_ListFile.begin();
-    for (unsigned int i = 1;stl_ListIterator != stl_ListFile.end();stl_ListIterator++,i++)
+    for (unsigned int i = 1; stl_ListIterator != stl_ListFile.end(); stl_ListIterator++, i++)
     {
         TCHAR tszFileCode[64];
-        memset(tszFileCode,'\0',sizeof(tszFileCode));
+        memset(tszFileCode, '\0', sizeof(tszFileCode));
 
-        _stprintf_s(tszFileCode,_T("XYRYUPVERCODE%d"),i);
+        _stprintf_s(tszFileCode, _T("XYRYUPVERCODE%d"), i);
 
-        st_JsonLocalObject["ModuleVersion"] = (Json::Int64)m_nFileVer;
+        st_JsonLocalObject["ModuleVersion"] = (Json::UInt64)m_nFileVer;
         st_JsonLocalObject["ModuleCode"] = tszFileCode;
         st_JsonLocalObject["ModuleName"] = stl_ListIterator->tszFileName;
-        if (NULL == lpszCfgPath)
+        if (NULL == lpszCustomDir)
         {
             st_JsonLocalObject["ModulePath"] = stl_ListIterator->tszFilePath;
         }
         else
         {
-            st_JsonLocalObject["ModulePath"] = lpszCfgPath;
+            st_JsonLocalObject["ModulePath"] = lpszCustomDir;
         }
         if (NULL != lpszUPFile)
         {
@@ -535,23 +539,20 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
                 HelpModule_IsErrorOccur = FALSE;
                 HelpModule_dwErrorCode = BaseLib_GetLastError();
                 return FALSE;
-            }
-            if (isalpha(lpszPath[0]))
-            {
-                BaseLib_OperatorString_FixPath(tszDelPath, 2);
-            }
-            if (lpszPath[_tcslen(lpszPath)] != '\\' && lpszPath[_tcslen(lpszPath)] != '/')
-            {
-                //没有结尾，需要修正
-                _stprintf_s(tszDlPath,_T("%s%s%s"), lpszDlUrl, tszDelPath + 1,stl_ListIterator->tszFileName);
-            }
-            else
-            {
-                _stprintf_s(tszDlPath,_T("%s%s%s"), lpszDlUrl, tszDelPath,stl_ListIterator->tszFileName);
-            }
+			}
+			BaseLib_OperatorString_FixPath(tszDelPath, 2);
+			if (lpszPath[_tcslen(lpszPath) - 1] != '\\' && lpszPath[_tcslen(lpszPath) - 1] != '/')
+			{
+				//有结尾，需要修正
+				_stprintf_s(tszDlPath, _T("%s%s%s"), lpszDlUrl, tszDelPath + 1, stl_ListIterator->tszFileName);
+			}
+			else
+			{
+				_stprintf_s(tszDlPath, _T("%s%s%s"), lpszDlUrl, tszDelPath, stl_ListIterator->tszFileName);
+			}
             st_JsonRemoteObject["ModuleRun"] = 0;
-            st_JsonRemoteObject["ModuleVersion"] = (Json::Int64)m_nFileVer;
-            st_JsonRemoteObject["ModuleCode"] = tszFileCode;
+			st_JsonRemoteObject["ModuleVersion"] = (Json::UInt64)m_nFileVer;
+			st_JsonRemoteObject["ModuleCode"] = tszFileCode;
             st_JsonRemoteObject["ModuleName"] = stl_ListIterator->tszFileName;
             st_JsonRemoteObject["ModuleDownload"] = tszDlPath;
             st_JsonRemoteArray.append(st_JsonRemoteObject);
@@ -583,28 +584,6 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath,LPCTSTR lpszLocal
             HelpModule_dwErrorCode = SystemApi_GetLastError();
             return FALSE;
         }
-    }
-    return TRUE;
-}
-//////////////////////////////////////////////////////////////////////////
-//                      回调函数
-//////////////////////////////////////////////////////////////////////////
-BOOL CALLBACK CHelpModule_Api::HelpModule_Api_EnumFile(LPCSTR lpFileOrPath, BOOL bFindPath, LPVOID lParam)
-{
-    list<HELPMODULE_FILELIST> *pStl_ListFile = (list<HELPMODULE_FILELIST> *)lParam;
-    if (!bFindPath)
-    {
-        HELPMODULE_FILELIST st_FileList;
-        memset(&st_FileList, '\0', sizeof(HELPMODULE_FILELIST));
-
-        if (!BaseLib_OperatorString_GetFileAndPath(lpFileOrPath, st_FileList.tszFilePath, st_FileList.tszFileName))
-        {
-            HelpModule_IsErrorOccur = TRUE;
-            HelpModule_dwErrorCode = BaseLib_GetLastError();
-            return FALSE;
-        }
-
-        pStl_ListFile->push_back(st_FileList);
     }
     return TRUE;
 }

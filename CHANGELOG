@@ -1,0 +1,35 @@
+XEngine_UPDater V1.1.0.1001 
+
+添加:jsoncpp模块到项目中
+修改::枚举文件的方式
+更新:VS2019到VS2022
+修正:退出崩溃的问题
+修正:fixpath 使用上面的一些问题
+删除:帮助模块构建版本的自定义版本参数
+
+added:jsoncpp module
+modify:list file method
+update:vs2019 to vs2022
+fixed:crashed when existed
+fixed:fixpath incorrent at packet url
+delete:cant use custom version parament fort help module
+======================================================================================
+XEngine_UPDater V1.0.0.1001 
+
+支持:版本列表创建
+支持:主版本和模块版本检查和更新
+支持:文件安装
+支持:更新描述
+支持:文件清理删除
+支持:下载任务数配置
+支持:自动配置更新后的版本列表
+支持:仅仅更新检查
+
+support:create version list
+support:mainly and module version check and update
+support:file install
+support:update description
+support:file clear and delete
+support:download number of task
+support:auto configure after update
+support:just check update

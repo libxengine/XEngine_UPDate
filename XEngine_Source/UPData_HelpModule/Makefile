@@ -1,10 +1,10 @@
 CC = g++ -Wall -std=c++17 -fPIC
 RELEASE = 0
 UNICODE = 0
-INCLUDE = -I ./
+INCLUDE = -I ./ -I ../XEngine_ThirdPart/jsoncpp
 FILECENTOS = /etc/redhat-release
-LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk -L ../UPData_FileParser
-LIB = -lXEngine_BaseLib -lXEngine_SystemApi -lUPData_FileParser
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk -L ../XEngine_ThirdPart/jsoncpp -L ../UPData_FileParser
+LIB = -lXEngine_BaseLib -lXEngine_SystemApi -ljsoncpp -lUPData_FileParser
 LIBEX = -static-libgcc -lrt -ldl
 LOADSO = -Wl,-rpath=./,--disable-new-dtags
 LIBINCLUDE = HelpModule_Api.o pch.o
@@ -36,7 +36,7 @@ all:$(LIBINCLUDE)
 HelpModule_Api.o:./HelpModule_Api/HelpModule_Api.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./HelpModule_Api/HelpModule_Api.cpp
 pch.o:pch.cpp
-	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) pch.cpp
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) pch.cpp
 
 
 InstallAll:InstallSo 

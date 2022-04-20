@@ -1,11 +1,11 @@
-#include "UPDater_Hdr.h"
+ï»¿#include "UPDater_Hdr.h"
 
 BOOL UPDater_Parament(int argc, char **argv)
 {
 	LPCTSTR lpszFile = _T("./XEngine_Config/XEngine_Config.ini");
 	if (!Config_Ini_File(lpszFile, &st_ServiceConfig))
 	{
-		printf("½âÎöÅäÖÃÎÄ¼şÊ§°Ü,Config_Ini_File:%lX\n", Config_GetLastError());
+		printf("è§£æé…ç½®æ–‡ä»¶å¤±è´¥,Config_Ini_File:%lX\n", Config_GetLastError());
 		return FALSE;
 	}
 
@@ -18,7 +18,7 @@ BOOL UPDater_Parament(int argc, char **argv)
 		}
 		if ((0 == _tcscmp("-v", argv[i])) || (0 == _tcscmp("-V", argv[i])))
 		{
-			printf("Version£ºV1.1.0\n");
+			printf("Versionï¼šV1.1.0\n");
 			return FALSE;
 		}
 		else if (0 == _tcscmp("-p", argv[i]))
@@ -31,6 +31,11 @@ BOOL UPDater_Parament(int argc, char **argv)
 			st_ServiceConfig.bIsMake = TRUE;
 			memset(st_ServiceConfig.st_Maker.tszMakePath, '\0', sizeof(st_ServiceConfig.st_Maker.tszMakePath));
 			_tcscpy_s(st_ServiceConfig.st_Maker.tszMakePath, MAX_PATH, argv[i + 1]);
+		}
+		else if (0 == _tcscmp("-f", argv[i]))
+		{
+			memset(st_ServiceConfig.tszLocalList, '\0', sizeof(st_ServiceConfig.tszLocalList));
+			_tcscpy_s(st_ServiceConfig.tszLocalList, MAX_PATH, argv[i + 1]);
 		}
 		else if (0 == _tcscmp("-l", argv[i]))
 		{
@@ -47,13 +52,14 @@ BOOL UPDater_Parament(int argc, char **argv)
 
 void UPDater_ParamentHelp()
 {
-	printf(_T("--------------------------Æô¶¯²ÎÊı°ïÖú¿ªÊ¼--------------------------\n"));
-	printf(_T("¸üĞÂ·şÎñÆô¶¯²ÎÊı£º³ÌĞò ²ÎÊı ²ÎÊıÖµ£¬²ÎÊıÊÇÇø·Ö´óĞ¡Ğ´µÄ\n"));
-	printf(_T("-h or -H£ºÆô¶¯²ÎÊı°ïÖúÌáÊ¾ĞÅÏ¢\n"));
-	printf(_T("-v or -V£º²é¿´ÏµÍ³°æ±¾\n"));
-	printf(_T("-p£ºÉèÖÃ¸üĞÂÎÄ¼şÏÂÔØµÄÄ¿Â¼,Ä¬ÈÏ:./UPFile/\n"));
-	printf(_T("-m£º¹¹½¨±¾µØ°æ±¾¸üĞÂÁĞ±í£¬ĞèÒª²ÎÊıÉèÖÃÒª¹¹½¨Èí¼ş°æ±¾µÄÄ¿Â¼,Ä¿Â¼Ä¬ÈÏĞèÒªÌí¼Ó/·ûºÅ.\n"));
-	printf(_T("-l£ºÉèÖÃ±¾µØÈÕÖ¾¼ÇÂ¼ĞÅÏ¢¼¶±ğ\n"));
-	printf(_T("-d£ºÉèÖÃÓĞĞÂ°æ±¾ÊÇ·ñÏÂÔØÎÄ¼ş,Ä¬ÈÏ0²»ÏÂÔØ,1Î»ÏÂÔØ\n"));
-	printf(_T("--------------------------Æô¶¯²ÎÊı°ïÖú½áÊø--------------------------\n"));
+	printf(_T("--------------------------å¯åŠ¨å‚æ•°å¸®åŠ©å¼€å§‹--------------------------\n"));
+	printf(_T("æ›´æ–°æœåŠ¡å¯åŠ¨å‚æ•°ï¼šç¨‹åº å‚æ•° å‚æ•°å€¼ï¼Œå‚æ•°æ˜¯åŒºåˆ†å¤§å°å†™çš„\n"));
+	printf(_T("-h or -Hï¼šå¯åŠ¨å‚æ•°å¸®åŠ©æç¤ºä¿¡æ¯\n"));
+	printf(_T("-v or -Vï¼šæŸ¥çœ‹ç³»ç»Ÿç‰ˆæœ¬\n"));
+	printf(_T("-pï¼šè®¾ç½®æ›´æ–°æ–‡ä»¶ä¸‹è½½çš„ç›®å½•,é»˜è®¤:./UPFile/\n"));
+	printf(_T("-mï¼šæ„å»ºæœ¬åœ°ç‰ˆæœ¬æ›´æ–°åˆ—è¡¨ï¼Œéœ€è¦å‚æ•°è®¾ç½®è¦æ„å»ºè½¯ä»¶ç‰ˆæœ¬çš„ç›®å½•.\n"));
+	printf(_T("-fï¼šæŒ‡å®šæœ¬åœ°æ–‡ä»¶åˆ—è¡¨è·¯å¾„,æ­¤å‚æ•°å¯ä»¥ç”¨äºç”Ÿæˆå’Œæ›´æ–°.\n"));
+	printf(_T("-lï¼šè®¾ç½®æœ¬åœ°æ—¥å¿—è®°å½•ä¿¡æ¯çº§åˆ«\n"));
+	printf(_T("-dï¼šè®¾ç½®æœ‰æ–°ç‰ˆæœ¬æ˜¯å¦ä¸‹è½½æ–‡ä»¶,é»˜è®¤0ä¸ä¸‹è½½,1ä½ä¸‹è½½\n"));
+	printf(_T("--------------------------å¯åŠ¨å‚æ•°å¸®åŠ©ç»“æŸ--------------------------\n"));
 }

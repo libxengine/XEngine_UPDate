@@ -3,6 +3,8 @@ UNICODE = 0
 
 FLAGS = RELEASE=$(RELEASE)
 
+MODULE_JSON_PATH = ./XEngine_ThirdPart/jsoncpp
+
 MODULE_FILEPARSE_PATH = ./UPData_FileParser
 MODULE_DOWNLOAD_PATH = ./UPData_Downloads
 MODULE_HELP_PATH = ./UPData_HelpModule
@@ -10,11 +12,14 @@ MODULE_CONFIGURE_PATH = ./UPData_Configure
 
 UPDATE_APP_PATH = ./XEngine_UPDater
 
-XENGINE = libUPData_FileParser.so libUPData_Downloads.so libUPData_HelpModule.so libUPData_Configure.so        \
-	   XEngine_UPDater.exe 
+XENGINE = libjsoncpp.so libUPData_FileParser.so libUPData_Downloads.so libUPData_HelpModule.so libUPData_Configure.so        \
+	      XEngine_UPDater.exe 
 
 .PHONY:MakeAll 
 MakeAll:$(XENGINE)
+
+libjsoncpp.so:
+	make -C $(MODULE_JSON_PATH) $(FLAGS)
 
 libUPData_Downloads.so:
 	make -C $(MODULE_DOWNLOAD_PATH) $(FLAGS)

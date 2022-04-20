@@ -45,7 +45,7 @@ extern "C" BOOL HelpModule_Api_Clear(LPCTSTR lpszRemoteJson, int nMsgLen)
 {
 	return m_HelpApi.HelpModule_Api_Clear(lpszRemoteJson, nMsgLen);
 }
-extern "C" BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, __int64x nFileVer, BOOL bSubDir, LPCTSTR lpszUPFile, LPCTSTR lpszDlUrl, LPCTSTR lpszCfgPath)
+extern "C" BOOL HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLocalFile, LPCTSTR lpszUPFile, LPCTSTR lpszDlUrl, LPCTSTR lpszCustomDir, BOOL bSubDir)
 {
-	return m_HelpApi.HelpModule_Api_BuildVer(lpszPath, lpszLocalFile, nFileVer, bSubDir, lpszUPFile, lpszDlUrl, lpszCfgPath);
+	return m_HelpApi.HelpModule_Api_BuildVer(lpszPath, lpszLocalFile, lpszUPFile, lpszDlUrl, lpszCustomDir, bSubDir);
 }
