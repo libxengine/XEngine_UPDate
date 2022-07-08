@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("构建标准版本列表失败！错误：%lX"), UPHelpModule_GetLastError());
 			goto NETSERVICE_APPEXIT;
 		}
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("构建本地版本列表成功！本地自定义列表名：%s，更新列表名：%s"), st_ServiceConfig.tszLocalList, "XEngine_Release.txt");
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("构建本地版本列表成功！本地自定义列表名：%s，更新列表名：%s"), st_ServiceConfig.tszLocalList, st_ServiceConfig.tszUPUrl);
 		goto NETSERVICE_APPEXIT;
 	}
 
