@@ -288,7 +288,7 @@ BOOL CHelpModule_Api::HelpModule_Api_SetVersion(LPCTSTR lpszLocalFile, LPCTSTR l
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_SETVER_DELETELOCALJSON;
         return FALSE;
     }
-    if (!SystemApi_File_SaveBuffToFile(NULL, lpszLocalFile, st_JsonRoot.toStyledString().c_str(), st_JsonRoot.toStyledString().length()))
+    if (!SystemApi_File_SaveBuffToFile(lpszLocalFile, st_JsonRoot.toStyledString().c_str(), st_JsonRoot.toStyledString().length()))
     {
         HelpModule_IsErrorOccur = TRUE;
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_SETVER_WRITENEWJSON;
@@ -570,7 +570,7 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLoca
     }
     st_JsonBuilder["emitUTF8"] = true;
     //写到JSON文件
-    if (!SystemApi_File_SaveBuffToFile(NULL, lpszLocalFile, Json::writeString(st_JsonBuilder, st_JsonLocalRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonLocalRoot).length()))
+    if (!SystemApi_File_SaveBuffToFile(lpszLocalFile, Json::writeString(st_JsonBuilder, st_JsonLocalRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonLocalRoot).length()))
     {
         HelpModule_IsErrorOccur = FALSE;
         HelpModule_dwErrorCode = SystemApi_GetLastError();
@@ -578,7 +578,7 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLoca
     }
     if (NULL != lpszUPFile)
     {
-        if (!SystemApi_File_SaveBuffToFile(NULL, lpszUPFile, Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).length()))
+        if (!SystemApi_File_SaveBuffToFile(lpszUPFile, Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).length()))
         {
             HelpModule_IsErrorOccur = FALSE;
             HelpModule_dwErrorCode = SystemApi_GetLastError();
