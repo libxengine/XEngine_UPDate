@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "Config_ini/Config_ini.h"
+#include "Configure_File/Configure_File.h"
 /********************************************************************
 //    Created:     2021/08/17  14:49:40
 //    File Name:   D:\XEngine_UPDate\XEngine_Source\UPData_Configure\pch.cpp
@@ -14,11 +14,11 @@
 BOOL Config_IsErrorOccur = FALSE;
 DWORD Config_dwErrorCode = 0;
 //////////////////////////////////////////////////////////////////////////
-CConfig_Ini m_Config;
+CConfigure_File m_Config;
 //////////////////////////////////////////////////////////////////////////
 //                      导出函数
 //////////////////////////////////////////////////////////////////////////
-extern "C" DWORD Config_GetLastError(int* pInt_SysError)
+extern "C" DWORD Configure_GetLastError(int* pInt_SysError)
 {
 	if (NULL != pInt_SysError)
 	{
@@ -29,7 +29,7 @@ extern "C" DWORD Config_GetLastError(int* pInt_SysError)
 /************************************************************************/
 /*                              配置文件导出函数                        */
 /************************************************************************/
-extern "C" BOOL Config_Ini_File(LPCTSTR lpszConfigFile, XENGINE_SERVERCONFIG * pSt_ServerConfig)
+extern "C" BOOL Configure_File_Json(LPCTSTR lpszConfigFile, XENGINE_SERVERCONFIG * pSt_ServerConfig)
 {
-	return m_Config.Config_Ini_File(lpszConfigFile, pSt_ServerConfig);
+	return m_Config.Configure_File_Json(lpszConfigFile, pSt_ServerConfig);
 }

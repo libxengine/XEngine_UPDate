@@ -18,13 +18,12 @@ typedef struct tag_XEngine_ServerConfig
 	TCHAR tszUPUrl[MAX_PATH];
 	TCHAR tszLocalList[MAX_PATH];
 	TCHAR tszDownPath[MAX_PATH];
-	BOOL bIsMake;
 	BOOL bIsDown;
 	int nDlCount;
 	struct  
 	{
+		BOOL bIsMake;
 		TCHAR tszMakePath[MAX_PATH];
-		TCHAR tszUPFile[MAX_PATH];
 		TCHAR tszUPUrl[MAX_PATH];
 	}st_Maker;
     struct
@@ -34,12 +33,16 @@ typedef struct tag_XEngine_ServerConfig
         int nMaxCount;
         int nLogLeave;
     }st_XLog;
+	struct  
+	{
+		list<string>* pStl_ListVer;
+	}st_XVer;
 }XENGINE_SERVERCONFIG;
 //////////////////////////////////////////////////////////////////////////
 //                        导出函数定义
 //////////////////////////////////////////////////////////////////////////
-extern "C" DWORD Config_GetLastError(int *pInt_ErrorCode = NULL);
+extern "C" DWORD Configure_GetLastError(int *pInt_ErrorCode = NULL);
 /************************************************************************/
 /*                        文件配置读取                                  */
 /************************************************************************/
-extern "C" BOOL Config_Ini_File(LPCTSTR lpszConfigFile,XENGINE_SERVERCONFIG *pSt_ServerConfig);
+extern "C" BOOL Configure_File_Json(LPCTSTR lpszConfigFile, XENGINE_SERVERCONFIG * pSt_ServerConfig);

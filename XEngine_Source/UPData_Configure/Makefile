@@ -1,12 +1,12 @@
 CC = g++ -Wall -std=c++17 -fPIC
 RELEASE = 0
 UNICODE = 0
-INCLUDE = -I ./
-LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib 
-LIB = -lXEngine_BaseLib 
+INCLUDE = -I ./ -I ../XEngine_ThirdPart/jsoncpp
+LOADBIN = -L ../XEngine_ThirdPart/jsoncpp
+LIB = -ljsoncpp 
 LIBEX = -static-libgcc -lrt -ldl -lpthread
-LOADSO = -Wl,-rpath=
-LIBINCLUDE = Config_ini.o pch.o
+LOADSO = -Wl,-rpath=./,--disable-new-dtags
+LIBINCLUDE = Configure_File.o pch.o
 
 ifeq ($(RELEASE),1)
 FLAGS = -c -O2 
@@ -26,8 +26,8 @@ endif
 all:$(LIBINCLUDE)
 	$(CC) $(DEBUG) $(LIBINCLUDE) -o libUPData_Configure.so -shared -fPIC $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
 
-Config_ini.o:./Config_ini/Config_ini.cpp             
-	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./Config_ini/Config_ini.cpp 
+Configure_File.o:./Configure_File/Configure_File.cpp             
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./Configure_File/Configure_File.cpp 
 						              
 pch.o:./pch.cpp                 		       	    
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./pch.cpp
