@@ -109,7 +109,7 @@ BOOL CFileParser_ReadVersion::FileParser_ReadVer_GetRemote(LPCTSTR lpszJsonMsg, 
 	for (unsigned int i = 0; i < st_JsonArray.size(); i++)
 	{
 		//开始读取文件列表内容
-		(*pppSt_FileList)[i]->bIsRun = st_JsonArray[i]["ModuleRun"].asInt();
+		(*pppSt_FileList)[i]->bIsRun = st_JsonArray[i]["ModuleRun"].asBool();
 		(*pppSt_FileList)[i]->nModuleVersion = st_JsonArray[i]["ModuleVersion"].asInt64();
 		_tcscpy((*pppSt_FileList)[i]->tszModuleCode, st_JsonArray[i]["ModuleCode"].asCString());
 		if (!st_JsonArray[i]["ModulePath"].isNull())

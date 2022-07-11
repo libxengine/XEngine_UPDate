@@ -554,7 +554,7 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLoca
             {
                 _stprintf_s(tszDlPath, _T("%s%s%s"), lpszDlUrl, stl_ListIterator->tszFilePath + 2, stl_ListIterator->tszFileName);
             }
-            st_JsonRemoteObject["ModuleRun"] = 0;
+            st_JsonRemoteObject["ModuleRun"] = false;
 			st_JsonRemoteObject["ModuleVersion"] = (Json::UInt64)m_nFileVer;
 			st_JsonRemoteObject["ModuleCode"] = tszFileCode;
             st_JsonRemoteObject["ModuleName"] = stl_ListIterator->tszFileName;
