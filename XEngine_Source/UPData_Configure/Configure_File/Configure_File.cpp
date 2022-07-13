@@ -86,6 +86,7 @@ BOOL CConfigure_File::Configure_File_Json(LPCTSTR lpszConfigFile, XENGINE_SERVER
 	_tcscpy(pSt_ServerConfig->tszDownPath, st_JsonRoot["tszDownPath"].asCString());
 	pSt_ServerConfig->bIsDown = st_JsonRoot["bIsDown"].asBool();
 	pSt_ServerConfig->nDlCount = st_JsonRoot["nDlCount"].asInt();
+	pSt_ServerConfig->nTimeout = st_JsonRoot["nTimeout"].asInt();
 	//日志配置
 	if (st_JsonRoot["XLog"].empty() || (4 != st_JsonRoot["XLog"].size()))
 	{

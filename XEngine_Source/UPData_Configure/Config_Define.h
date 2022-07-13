@@ -20,6 +20,7 @@ typedef struct tag_XEngine_ServerConfig
 	TCHAR tszDownPath[MAX_PATH];
 	BOOL bIsDown;
 	int nDlCount;
+	int nTimeout;
 	struct  
 	{
 		BOOL bIsMake;

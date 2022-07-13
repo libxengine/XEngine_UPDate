@@ -1,6 +1,7 @@
 {
     "bIsDown":true,
     "nDlCount":2,
+    "nTimeout":2000,
     "tszUPUrl":"http://www.xyry.org/UPLoad/XEngine_Release.txt",
     "tszLocalList":"./XEngine_Config/XEngine_Release.list",
     "tszDownPath":"./XEngine_DLFile/",

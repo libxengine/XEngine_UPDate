@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 		goto NETSERVICE_APPEXIT;
 	}
 
-	st_HTTPParament.nTimeConnect = 2000;
+	st_HTTPParament.nTimeConnect = st_ServiceConfig.nTimeout;
 	if (!APIHelp_HttpRequest_Get(st_ServiceConfig.tszUPUrl, &ptszJsonMsg, &nUPLen, NULL, NULL, NULL, &st_HTTPParament))
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("获取更新失败,获取新版本信息失败,错误:%lX!"), UPFileParser_GetLastError());
