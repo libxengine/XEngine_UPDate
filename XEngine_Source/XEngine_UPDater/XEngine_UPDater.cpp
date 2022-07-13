@@ -42,9 +42,11 @@ int main(int argc, char** argv)
 	FILEPARSER_VERSIONINFO** ppSt_ListRemote;
 	list<FILEPARSER_VERSIONINFO> stl_ListUPDate;
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
-
+	APIHELP_HTTPPARAMENT st_HTTPParament;
+	
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
 	memset(&st_ServiceConfig, '\0', sizeof(XENGINE_SERVERCONFIG));
+	memset(&st_HTTPParament, '\0', sizeof(APIHELP_HTTPPARAMENT));
 
 	if (!UPDater_Parament(argc, argv))
 	{
@@ -87,7 +89,8 @@ int main(int argc, char** argv)
 		goto NETSERVICE_APPEXIT;
 	}
 
-	if (!APIHelp_HttpRequest_Get(st_ServiceConfig.tszUPUrl, &ptszJsonMsg, &nUPLen))
+	st_HTTPParament.nTimeConnect = 2000;
+	if (!APIHelp_HttpRequest_Get(st_ServiceConfig.tszUPUrl, &ptszJsonMsg, &nUPLen, NULL, NULL, NULL, &st_HTTPParament))
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("获取更新失败,获取新版本信息失败,错误:%lX!"), UPFileParser_GetLastError());
 		goto NETSERVICE_APPEXIT;
