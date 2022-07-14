@@ -1,3 +1,23 @@
+XEngine_UPDater V1.2.0.1001 
+
+增加:更新配置读取现在支持指定超时时间了
+更新:匹配XEngine 7.38版本
+修改:更新文件列表打印错误
+修改:从ini配置文件改为json
+修改:bIsMake参数
+修改:运行参数修改为bool值
+修改:现在支持MACOS系统了
+修正:绝对路径处理错误
+
+added:Timeout for getting updates
+update:match xengine version 7.38
+modify:make file list printf error
+modify:from INI configuration to json configuration for configure module
+modify:bIsMake read parament
+modify:run parament modify to bool
+modify:support macos now
+fixed:The problem that absolute path is incorrect
+======================================================================================
 XEngine_UPDater V1.1.0.1001 
 
 添加:jsoncpp模块到项目中
