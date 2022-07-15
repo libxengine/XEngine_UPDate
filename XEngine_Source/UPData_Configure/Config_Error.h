@@ -13,4 +13,8 @@
 /////////////////////////////////////////////////////////////
 //                    错误表
 /////////////////////////////////////////////////////////////
-#define ERROR_UPDATE_MODULE_CONFIG_INI_PARAMENT 0x0010001  
+#define ERROR_UPDATE_MODULE_CONFIG_PARAMENT 0x0010001        //参数错误
+#define ERROR_UPDATE_MODULE_CONFIG_OPENFILE 0x0010002        //打开失败
+#define ERROR_UPDATE_MODULE_CONFIG_PARSE 0x0010003           //解析失败
+#define ERROR_UPDATE_MODULE_CONFIG_XLOG 0x0010004            //日志解析错误
+#define ERROR_UPDATE_MODULE_CONFIG_MALLOC 0x0010005          //申请内存失败

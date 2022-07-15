@@ -288,7 +288,7 @@ BOOL CHelpModule_Api::HelpModule_Api_SetVersion(LPCTSTR lpszLocalFile, LPCTSTR l
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_SETVER_DELETELOCALJSON;
         return FALSE;
     }
-    if (!SystemApi_File_SaveBuffToFile(NULL, lpszLocalFile, st_JsonRoot.toStyledString().c_str(), st_JsonRoot.toStyledString().length()))
+    if (!SystemApi_File_SaveBuffToFile(lpszLocalFile, st_JsonRoot.toStyledString().c_str(), st_JsonRoot.toStyledString().length()))
     {
         HelpModule_IsErrorOccur = TRUE;
         HelpModule_dwErrorCode = ERROR_XENGINE_UPDATA_UPDATADL_DLPARSER_SETVER_WRITENEWJSON;
@@ -527,30 +527,34 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLoca
         if (NULL != lpszUPFile)
         {
             TCHAR tszDlPath[1024];
-            TCHAR tszDelPath[MAX_PATH];
-
             memset(tszDlPath,'\0',sizeof(tszDlPath));
-            memset(tszDelPath,'\0',MAX_PATH);
-
-            _tcscpy(tszDelPath,stl_ListIterator->tszFilePath);
             //删除指定字符串
-            if (!BaseLib_OperatorString_DelSub(tszDelPath, lpszPath))
+            int nPathType = 0;
+            BaseLib_OperatorString_GetPath(stl_ListIterator->tszFilePath, &nPathType);
+            if (1 == nPathType)
             {
-                HelpModule_IsErrorOccur = FALSE;
-                HelpModule_dwErrorCode = BaseLib_GetLastError();
-                return FALSE;
-			}
-			BaseLib_OperatorString_FixPath(tszDelPath, 2);
-			if (lpszPath[_tcslen(lpszPath) - 1] != '\\' && lpszPath[_tcslen(lpszPath) - 1] != '/')
-			{
-				//有结尾，需要修正
-				_stprintf_s(tszDlPath, _T("%s%s%s"), lpszDlUrl, tszDelPath + 1, stl_ListIterator->tszFileName);
-			}
-			else
-			{
-				_stprintf_s(tszDlPath, _T("%s%s%s"), lpszDlUrl, tszDelPath, stl_ListIterator->tszFileName);
-			}
-            st_JsonRemoteObject["ModuleRun"] = 0;
+				TCHAR tszDelPath[MAX_PATH];
+                TCHAR tszSubPath[MAX_PATH];
+
+				memset(tszDelPath, '\0', MAX_PATH);
+                memset(tszSubPath, '\0', MAX_PATH);
+
+                _tcscpy(tszDelPath, lpszPath);
+                _tcscpy(tszSubPath, stl_ListIterator->tszFilePath);
+
+                tszDelPath[_tcslen(tszDelPath) - 2] = '\0';
+                BaseLib_OperatorString_DelLastForChar(tszDelPath, '\\');
+                _tcscat(tszDelPath, "\\");
+
+                BaseLib_OperatorString_DelSub(tszSubPath, tszDelPath);
+                BaseLib_OperatorString_FixPath(tszSubPath, 2);
+                _stprintf_s(tszDlPath, _T("%s%s%s"), lpszDlUrl, tszSubPath, stl_ListIterator->tszFileName);
+            }
+            else
+            {
+                _stprintf_s(tszDlPath, _T("%s%s%s"), lpszDlUrl, stl_ListIterator->tszFilePath + 2, stl_ListIterator->tszFileName);
+            }
+            st_JsonRemoteObject["ModuleRun"] = false;
 			st_JsonRemoteObject["ModuleVersion"] = (Json::UInt64)m_nFileVer;
 			st_JsonRemoteObject["ModuleCode"] = tszFileCode;
             st_JsonRemoteObject["ModuleName"] = stl_ListIterator->tszFileName;
@@ -570,7 +574,7 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLoca
     }
     st_JsonBuilder["emitUTF8"] = true;
     //写到JSON文件
-    if (!SystemApi_File_SaveBuffToFile(NULL, lpszLocalFile, Json::writeString(st_JsonBuilder, st_JsonLocalRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonLocalRoot).length()))
+    if (!SystemApi_File_SaveBuffToFile(lpszLocalFile, Json::writeString(st_JsonBuilder, st_JsonLocalRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonLocalRoot).length()))
     {
         HelpModule_IsErrorOccur = FALSE;
         HelpModule_dwErrorCode = SystemApi_GetLastError();
@@ -578,7 +582,7 @@ BOOL CHelpModule_Api::HelpModule_Api_BuildVer(LPCTSTR lpszPath, LPCTSTR lpszLoca
     }
     if (NULL != lpszUPFile)
     {
-        if (!SystemApi_File_SaveBuffToFile(NULL, lpszUPFile, Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).length()))
+        if (!SystemApi_File_SaveBuffToFile(lpszUPFile, Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).c_str(), Json::writeString(st_JsonBuilder, st_JsonRemoteRoot).length()))
         {
             HelpModule_IsErrorOccur = FALSE;
             HelpModule_dwErrorCode = SystemApi_GetLastError();

@@ -42,9 +42,11 @@ int main(int argc, char** argv)
 	FILEPARSER_VERSIONINFO** ppSt_ListRemote;
 	list<FILEPARSER_VERSIONINFO> stl_ListUPDate;
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
-
+	APIHELP_HTTPPARAMENT st_HTTPParament;
+	
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
 	memset(&st_ServiceConfig, '\0', sizeof(XENGINE_SERVERCONFIG));
+	memset(&st_HTTPParament, '\0', sizeof(APIHELP_HTTPPARAMENT));
 
 	if (!UPDater_Parament(argc, argv))
 	{
@@ -69,19 +71,26 @@ int main(int argc, char** argv)
 	signal(SIGTERM, Signale_Handler);
 	signal(SIGABRT, Signale_Handler);
 
-	if (st_ServiceConfig.bIsMake)
+	if (st_ServiceConfig.st_Maker.bIsMake)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("开始构建版本列表"));
-		if (!HelpModule_Api_BuildVer(st_ServiceConfig.st_Maker.tszMakePath, st_ServiceConfig.tszLocalList, st_ServiceConfig.st_Maker.tszUPFile, st_ServiceConfig.st_Maker.tszUPUrl))
+		TCHAR tszFilePath[MAX_PATH];
+		TCHAR tszFileName[MAX_PATH];
+
+		memset(tszFilePath, '\0', MAX_PATH);
+		memset(tszFileName, '\0', MAX_PATH);
+		BaseLib_OperatorString_GetFileAndPath(st_ServiceConfig.st_Maker.tszUPUrl, tszFilePath, tszFileName);
+		if (!HelpModule_Api_BuildVer(st_ServiceConfig.st_Maker.tszMakePath, st_ServiceConfig.tszLocalList, tszFileName, tszFilePath))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("构建标准版本列表失败！错误：%lX"), UPHelpModule_GetLastError());
 			goto NETSERVICE_APPEXIT;
 		}
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("构建本地版本列表成功！本地自定义列表名：%s，更新列表名：%s"), st_ServiceConfig.tszLocalList, "XEngine_Release.txt");
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("构建本地版本列表成功！本地自定义列表名：%s，更新列表名：%s"), st_ServiceConfig.tszLocalList, st_ServiceConfig.tszUPUrl);
 		goto NETSERVICE_APPEXIT;
 	}
 
-	if (!APIHelp_HttpRequest_Get(st_ServiceConfig.tszUPUrl, &ptszJsonMsg, &nUPLen))
+	st_HTTPParament.nTimeConnect = st_ServiceConfig.nTimeout;
+	if (!APIHelp_HttpRequest_Get(st_ServiceConfig.tszUPUrl, &ptszJsonMsg, &nUPLen, NULL, NULL, NULL, &st_HTTPParament))
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("获取更新失败,获取新版本信息失败,错误:%lX!"), UPFileParser_GetLastError());
 		goto NETSERVICE_APPEXIT;

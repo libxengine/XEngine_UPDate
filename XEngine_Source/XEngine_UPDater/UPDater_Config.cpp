@@ -2,10 +2,10 @@
 
 BOOL UPDater_Parament(int argc, char **argv)
 {
-	LPCTSTR lpszFile = _T("./XEngine_Config/XEngine_Config.ini");
-	if (!Config_Ini_File(lpszFile, &st_ServiceConfig))
+	LPCTSTR lpszFile = _T("./XEngine_Config/XEngine_Config.json");
+	if (!Configure_File_Json(lpszFile, &st_ServiceConfig))
 	{
-		printf("解析配置文件失败,Config_Ini_File:%lX\n", Config_GetLastError());
+		printf("解析配置文件失败,Config_Ini_File:%lX\n", Configure_GetLastError());
 		return FALSE;
 	}
 
@@ -28,9 +28,11 @@ BOOL UPDater_Parament(int argc, char **argv)
 		}
 		else if (0 == _tcscmp("-m", argv[i]))
 		{
-			st_ServiceConfig.bIsMake = TRUE;
+			st_ServiceConfig.st_Maker.bIsMake = TRUE;
 			memset(st_ServiceConfig.st_Maker.tszMakePath, '\0', sizeof(st_ServiceConfig.st_Maker.tszMakePath));
+			memset(st_ServiceConfig.st_Maker.tszUPUrl, '\0', sizeof(st_ServiceConfig.st_Maker.tszUPUrl));
 			_tcscpy_s(st_ServiceConfig.st_Maker.tszMakePath, MAX_PATH, argv[i + 1]);
+			_tcscpy_s(st_ServiceConfig.st_Maker.tszUPUrl, MAX_PATH, argv[i + 2]);
 		}
 		else if (0 == _tcscmp("-f", argv[i]))
 		{

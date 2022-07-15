@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\Config_ini">
-      <UniqueIdentifier>{d7e0e12a-2591-4c48-aa80-28a2467fb773}</UniqueIdentifier>
+    <Filter Include="头文件\Configure_File">
+      <UniqueIdentifier>{e3718a16-caf5-4528-8816-a5a8f78a15b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Config_ini">
-      <UniqueIdentifier>{299013d2-ef89-481b-970b-5eb1b575a3fa}</UniqueIdentifier>
+    <Filter Include="源文件\Configure_File">
+      <UniqueIdentifier>{6a1842c0-268d-4e3c-a925-94cf1733f0da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,14 +27,14 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Config_ini\Config_ini.h">
-      <Filter>头文件\Config_ini</Filter>
-    </ClInclude>
     <ClInclude Include="Config_Define.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Config_Error.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Configure_File\Configure_File.h">
+      <Filter>头文件\Configure_File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -44,8 +44,8 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Config_ini\Config_ini.cpp">
-      <Filter>源文件\Config_ini</Filter>
+    <ClCompile Include="Configure_File\Configure_File.cpp">
+      <Filter>源文件\Configure_File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
